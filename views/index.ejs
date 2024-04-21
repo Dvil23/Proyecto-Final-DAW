@@ -1,11 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>Pagina</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+
+    <h1>Buscar video</h1>
+
+    <form action="/view" method="post">
+      <input type="text" name="file_path" placeholder="Nombre del archivo">
+      <button type="submit">Ver archivo</button>
+    </form>
+
+    <br>
+
+    <h1>Subir video</h1>
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="text" name="folderName" placeholder="Nombre de la carpeta">
+      <button type="submit">Subir Video</button>
+    </form>
+
+    <p><%= test %></p>
+
   </body>
 </html>

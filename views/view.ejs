@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pagina</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Ver video</h1>
+    <img src="http://192.168.1.34/videos/<%= message %>" alt="El archivo no es una foto">
+    <video width="1000" height="600" controls>
+      <source src="http://192.168.1.34/videos/<%= message %>.mp4" type="video/mp4">
+      Se ha producido un error con el video
+    </video>
+  </body>
+</html>
