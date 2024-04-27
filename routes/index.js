@@ -2,19 +2,58 @@ const db = require('../db')
 const express = require('express')
 const router = express()
 const fs = require('fs')
-require('dotenv').config()
+const bcrypt = require('bcrypt')
 
-const { Client } = require('ssh2')
+require('dotenv').config()
 
 const multer  = require('multer')
 const upload = multer({ storage: multer.memoryStorage({ inMemory: true }) })
 
+const saltRounds = 10
+
+// libreria session y su configuración
+const session = require('express-session')
+router.use(session({
+  secret: process.env.SESSION_COOKIE,
+  resave: false,
+  saveUninitialized: false
+}));
+
+router.use((req, res, next) => { 
+  //Si el usuario está logeado en la sesión, pasa los datos del usuario en local
+  if (req.session && req.session.user) {
+    res.locals.user = req.session.user;
+  }
+  next();
+});
+
+
+// libreria ssh2 y su configuración
+const { Client } = require('ssh2')
 const sshConfig = {
   host: process.env.SSH_host,
   port: process.env.SSH_port,
   username: process.env.SSH_user,
   privateKey: require('fs').readFileSync(process.env.ssh_key_path)
 }
+
+// ---------------
+// Tareas por hacer:
+// Botón de cerrar sesión
+// Cerrar sesión cuando estas logeado y te registras
+// El registro debe llevarte al login
+// Poner en el header la imagen de perfil a la derecha
+// Poner en el header links a todas las paginas principales 
+// En el header poner Register/Login, a menos que estés logeado
+// Pagina de tu perfil de usuario, con todos los datos del usuario, y permitirle cambiarlos
+// Poner otro campo de repetir contraseña, y verificar en el registro si coinciden
+// En el perfil de usuario, acceso a crear nuevo curso
+// ----------------
+
+// Mi landing page
+router.get('/', (req, res, next) => {
+  res.render('index', { message: "aphelios" , test: ""})
+})
 
 router.post('/upload', upload.single('file'), (req, res) => {
 
@@ -43,39 +82,101 @@ router.post('/upload', upload.single('file'), (req, res) => {
   }).connect(sshConfig)
 })
 
-// Ver videos si pones su ruta en el formulario
+//Ver videos si pones su ruta en el formulario
 router.post('/view', (req, res, next) => {
   console.log(req.body.file_path)
   res.render('view', { message: req.body.file_path })
 })
 
-// Mi landing page
-router.get('/', function(req, res, next) {
-  res.render('index', { message: "aphelios" , test: ""})
+
+
+
+// ------------------REGISTER------------------
+router.get('/register', (req, res, next ) => {
+  res.render('register', { message: ""})
 })
 
 
+//Manejar el formulario de registro
+router.post('/register', (req, res, next ) => {
 
+  let { username, email, password, phone } = req.body
 
+  //Check para mirar que se han rellenado todos los campos
+  if (username=="" || email=="" || password=="" || phone==""){
+    res.render('register',{ message: "Porfavor, rellene todos los campos."})
+    return
+  }
 
+  let consulta_check="SELECT * FROM users WHERE username = ? OR email = ?"
 
+  //Check para ver si ya existe el Email o usuario en la base de datos
+  db.query(consulta_check,[username,email],(error,results)=>{
 
-// Conexión a base de datos (No definitiva, de prueba) y consulta
-router.get('/basedatos', (req, res, next) => {
-
-  db.query('SELECT * FROM actor', (err, result) => {
-    if (err) {
-      console.error('Error al consultar la base de datos:', err)
-      res.status(500).send('Error de servidor')
-      return
-    } else{
-      res.json(result)
+    //Si existe, pone nombre de error
+    if(results.length > 0){
+      res.render('register',{ message: "El nombre de usuario o email ya está en uso."})
     }
-    
+    // INSERT
+    else{
+
+      bcrypt.genSalt(saltRounds, function(err, salt) {
+        bcrypt.hash(password, salt, function(err, hash) {
+
+          let consulta_insert="INSERT INTO users (username, email, password, type, phone, pfp) VALUES (?, ?, ?, ?, ?, ?)"
+          db.query(consulta_insert, [username, email, hash, 0, phone, "default_pfp"])
+
+        })
+      })
+      
+      res.redirect('/')
+    }
+  })
+})
+
+// ------------------Login------------------
+router.get('/login', (req, res, next ) => {
+  res.render('login', { message: ""})
+})
+
+
+//Manejar el formulario de login
+router.post('/login', (req, res, next) => {
+
+  let { email, password } = req.body
+
+  let consulta_check = "SELECT * FROM users WHERE email = ?"
+
+  db.query(consulta_check, [email], (error, results) => {
+
+    if (results.length > 0) { //Existe el email
+
+      //Hashear la contraseña y compararla con el resultado de la base de datos
+      bcrypt.compare(password, results[0].password, (err, correct) => {
+
+        //Si todos los datos son correctos, inicia sesión y te redirecciona
+        if (correct) {
+          
+          req.session.user= {
+            id: results[0].id,
+            username: results[0].username,
+            pfp: results[0].pfp
+          }
+
+          res.redirect('/')
+
+        } else { //Existe el email, pero no coincide con la contraseña
+          res.render('login', { message: "El email y contraseña son incorrectos, o no existen" })
+        }
+      })
+    } else { //No existe el email
+      res.render('login', { message: "El email y contraseña son incorrectos, o no existen" })
+    }
   })
 })
 
 
 
-module.exports = router;
+
+module.exports = router
 

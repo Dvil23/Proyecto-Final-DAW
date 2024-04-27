@@ -1,0 +1,8 @@
+<div style="background-color: lightblue">
+    <h1>Mi header</h1>
+    <% if (typeof user !=='undefined') { %>
+    <p>Bienvenido <%= user.username %></p>
+    <% } else { %>
+    <p>Bienvenido Invitado</p>
+    <% } %>
+</div>
