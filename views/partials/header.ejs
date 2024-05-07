@@ -1,8 +1,79 @@
-<div style="background-color: lightblue">
-    <h1>Mi header</h1>
-    <% if (typeof user !=='undefined') { %>
-    <p>Bienvenido <%= user.username %></p>
-    <% } else { %>
-    <p>Bienvenido Invitado</p>
+<section id="main">
+    <% if (typeof user !=='undefined') { %> 
+    
+    <div id="header_menu">
+        <div id="menu_content">
+            <div><i class="fa-solid fa-user"></i><a href="/profile">Editar Perfil</a></div>
+            <div><i class="fa-solid fa-star"></i><a href="/plans">Planes</a></div>
+            <div><i class="fa-solid fa-plus"></i><a href="/create_course">Crear curso</a></div>
+            <form method="POST" action="/logout">
+                <i style="color:red" class="fa-solid fa-arrow-right-from-bracket"></i><button type="submit">Cerrar sesión</button>
+            </form>
+            
+        </div>
+    </div>
+    <div id="arrow-up"></div>
     <% } %>
-</div>
+    <header id="myheader">
+        <div id="title">
+            <h1>Mi Web</h1>
+        </div>
+        <div id="links">
+            <a href="/">Inicio</a>
+            <a href="/contacto">Contacto</a>
+
+            <% if (typeof user !=='undefined') { %> 
+
+            <a href="/profile" id="profile">
+                <img class="profile_picture" src="/images/<%= user.pfp %>.jpg" alt="">
+            </a>
+            
+            <% } else { %>
+
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            
+            <% } %>
+            
+        </div>
+    
+
+    </header>
+
+<script>
+
+
+let img=document.getElementById("profile")
+let header_menu= document.getElementById('header_menu')
+let header_arrow= document.getElementById('arrow-up')
+let timeout;
+
+if (img) {
+    console.log("he entrado")
+    img.addEventListener("mouseover", () => open_menu(true));
+    img.addEventListener("mouseout", handle_mouse);
+
+    header_arrow.addEventListener("mouseover", () => open_menu(false));
+    header_arrow.addEventListener("mouseout", handle_mouse);
+
+    header_menu.addEventListener("mouseover", () => open_menu(false));
+    header_menu.addEventListener("mouseout", close_menu);
+}
+
+function open_menu(something) {
+    clearTimeout(timeout);
+    header_menu.style.display="flex"
+    header_arrow.style.display="flex"
+}
+
+function close_menu() {
+    header_menu.style.display="none"
+    header_arrow.style.display="none"
+}
+
+function handle_mouse() {
+    timeout = setTimeout(close_menu, 380); 
+}
+
+
+</script>

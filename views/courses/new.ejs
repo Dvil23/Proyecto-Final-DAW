@@ -1,0 +1,85 @@
+<%- include("../partials/start.ejs") -%>
+
+<%- include("../partials/header.ejs") -%>
+
+<h3>Crear nuevo curso</h3>
+
+<form method="POST" action="/courses/new">
+
+    <input type="text" placeholder="Titulo">
+    
+    <textarea name="descripcion" palceholder="Descripción"></textarea>
+
+    <select id="category" name="category">
+        <% Object.keys(jsonData).forEach(category => { %>
+            <option value="<%= category %>"><%= category %></option>
+        <% }); %>
+    </select>
+
+    <div id="class_container">
+        <select id="class_select">
+        
+        </select>
+    </div>
+
+    <input type="range" min="1" max="100" value="50" class="slider" id="priceRange">
+    <p>Precio: <input type="number" id="priceInput" name="precio" value="50" min="1" max="100"></p>
+    <button type="Submit">Crear curso</button>
+</form>
+<script>
+
+// -------------Funciones para el select---------
+    let datos=<%- JSON.stringify(jsonData) %>;
+
+    let category = document.getElementById("category")
+    let class_container= document.getElementById("class_container")
+    category.addEventListener("change", function (){change_select()})
+
+    function change_select(){
+
+        let category_val = category.value
+
+        if (category_val=="otro"){
+            //Si es otro, quita el select y pone un input de texto
+            class_container.innerHTML=""
+            class_container.innerHTML="<input type='text' name='otro'>"
+        }else{
+            //Si es otra cosa, quita lo anterior para añadir lo nuevo
+            class_container.innerHTML=""
+            class_container.innerHTML="<select id='class_select'></select>"
+            let class_select = document.getElementById("class_select")
+
+            //Crea una opcion por cada dato del array
+            for (let i=0; i<datos[category_val].length; i++) {
+                
+                var option = document.createElement("option")
+                option.value = datos[category_val][i];
+                option.text = datos[category_val][i];
+
+                class_select.appendChild(option)
+            }
+        }
+        
+    }
+
+    change_select()
+
+    //----------Slider de precio-----------
+    const slider = document.getElementById("priceRange");
+    const priceInput = document.getElementById("priceInput");
+
+    slider.oninput = function() {
+    priceInput.value = this.value;
+    };
+
+    priceInput.oninput = function() {
+    let price = parseInt(this.value);
+    if (!isNaN(price)) {
+        price = Math.min(Math.max(price, parseInt(slider.min)), parseInt(slider.max));
+        priceInput.value = price;
+        slider.value = price;
+    }
+    };
+</script>
+
+<%- include("../partials/end.ejs") -%>

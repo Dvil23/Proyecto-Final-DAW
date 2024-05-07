@@ -39,21 +39,15 @@ const sshConfig = {
 
 // ---------------
 // Tareas por hacer:
-// Botón de cerrar sesión
-// Cerrar sesión cuando estas logeado y te registras
-// El registro debe llevarte al login
-// Poner en el header la imagen de perfil a la derecha
-// Poner en el header links a todas las paginas principales 
-// En el header poner Register/Login, a menos que estés logeado
-// Pagina de tu perfil de usuario, con todos los datos del usuario, y permitirle cambiarlos
-// Poner otro campo de repetir contraseña, y verificar en el registro si coinciden
 // En el perfil de usuario, acceso a crear nuevo curso
+// Que los campos del register y login no se borren si fallas
 // ----------------
 
 // Mi landing page
 router.get('/', (req, res, next) => {
   res.render('index', { message: "aphelios" , test: ""})
 })
+
 
 router.post('/upload', upload.single('file'), (req, res) => {
 
@@ -100,11 +94,17 @@ router.get('/register', (req, res, next ) => {
 //Manejar el formulario de registro
 router.post('/register', (req, res, next ) => {
 
-  let { username, email, password, phone } = req.body
-
+  let { username, email, password, repeat_password, phone } = req.body
+  
   //Check para mirar que se han rellenado todos los campos
   if (username=="" || email=="" || password=="" || phone==""){
     res.render('register',{ message: "Porfavor, rellene todos los campos."})
+    
+    return
+  }
+
+  if (password != repeat_password){
+    res.render('register',{ message: "Las contraseñas no coinciden."})
     return
   }
 
@@ -129,7 +129,7 @@ router.post('/register', (req, res, next ) => {
         })
       })
       
-      res.redirect('/')
+      res.redirect('/login')
     }
   })
 })
@@ -159,7 +159,6 @@ router.post('/login', (req, res, next) => {
           
           req.session.user= {
             id: results[0].id,
-            username: results[0].username,
             pfp: results[0].pfp
           }
 
@@ -175,6 +174,16 @@ router.post('/login', (req, res, next) => {
   })
 })
 
+router.post('/logout', (req, res, next) => {
+  req.session.destroy((err) => {
+    if (err) {
+        console.error('Error al cerrar sesión:', err);
+    } else {
+        console.log('Sesión cerrada correctamente.');
+        res.redirect('/'); // Redirige a la página principal u otra página después de cerrar sesión
+    }
+  })
+})
 
 
 

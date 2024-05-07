@@ -1,0 +1,10 @@
+{
+    "Informatica": ["Excel", "Powerpoint", "Word", "Mecanografía", "Photoshop", "Audacity", "Adobe Premiere Pro"],
+    "Programacion": ["Python", "Java", "C++", "Javascript", "PHP", "C#", "Swift", "Go", "Ruby", "SQL"],
+    "Desarrollo web": ["Vue", "Angular", "Obsidian", "NodeJS", "React", "HTML", "CSS", "SASS", "Javascript"],
+    "Analisis de datos": ["SQL", "MYSQL"],
+    "Desarrollo de videojuegos": ["Unreal Engine", "Unity", "Level design", "Character design"],
+    "Graphic design": ["Photoshop", "Gimp", "Character design"],
+    "3D Design": ["Blockbench", "Blender", "Rigging", "Voxels"],
+    "Otro":[]
+}

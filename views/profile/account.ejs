@@ -1,0 +1,21 @@
+<%- include("../partials/start.ejs") -%>
+
+<%- include("../partials/header.ejs") -%>
+
+<form action="/profile/account" method="post">
+    <h3>Cambiar datos de la cuenta</h3>
+    <img src="/images/<%= user.pfp %>.jpg">
+    <input type="text" name="username_form" value=<%= username %>>
+    <input type="text" name="phone_form" value=<%= phone %>>
+    <% if(type==0){ %>
+    <p>Actualmente eres un usuario corriente</p>
+    <span>Accede a muchos más cursos obteniendo la versión PRO <a href="/plans">aquí</a></span>
+    <% }else{ %>
+    <p>Eres un usuario PRO</p>
+    <span>Cancela tu subscripción <a href="/plans">aquí</a></span>
+    <%}%>
+    <span> <%= message %></span>
+    <button type="submit">Confirmar cambios</button>
+</form>
+
+<%- include("../partials/end.ejs") -%>
