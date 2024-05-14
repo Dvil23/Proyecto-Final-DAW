@@ -1,0 +1,34 @@
+#tags_container {
+  background-color: lightgray;
+  max-width: 80vw;
+  min-width: 200px;
+  min-height: 8vh;
+  height: auto;
+  margin-left: 8vw;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow-wrap: break-word;
+  border-radius: 10px;
+}
+#tags_container .unit_tag {
+  height: 4vh;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  margin-left: 7px;
+  overflow-wrap: break-word;
+}
+#tags_container .unit_tag p {
+  overflow-wrap: break-word;
+  height: auto;
+  margin-right: 1vh;
+}
+#tags_container .unit_tag i {
+  cursor: pointer;
+}/*# sourceMappingURL=new_course.css.map */

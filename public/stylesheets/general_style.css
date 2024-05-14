@@ -7,7 +7,6 @@
 #main {
   width: 100%;
   height: 100vh;
-  background-color: lightgreen;
   position: relative;
 }
 #main #header_menu {
@@ -59,8 +58,10 @@
   height: 5vh;
   right: 2.7vw;
   top: 5.5vh;
+  z-index: 999;
 }
 #main #myheader {
+  z-index: 999;
   max-width: 100vw;
   background-color: lightblue;
   width: 100%;

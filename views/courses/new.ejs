@@ -1,32 +1,131 @@
 <%- include("../partials/start.ejs") -%>
+<link rel="stylesheet" href="/stylesheets/new_course.css">
+</head>
+<body>
 
 <%- include("../partials/header.ejs") -%>
 
 <h3>Crear nuevo curso</h3>
 
-<form method="POST" action="/courses/new">
+<form id="courseForm" method="POST" action="/courses/new">
 
-    <input type="text" placeholder="Titulo">
+    <input type="text" placeholder="Titulo" name="title" required>
     
-    <textarea name="descripcion" palceholder="Descripción"></textarea>
+    <textarea palceholder="Descripción" name="description" required></textarea>
 
     <select id="category" name="category">
         <% Object.keys(jsonData).forEach(category => { %>
             <option value="<%= category %>"><%= category %></option>
-        <% }); %>
+        <% }) %>
     </select>
 
     <div id="class_container">
-        <select id="class_select">
-        
-        </select>
+        <select id="class_select" name="class_select"></select>
     </div>
 
-    <input type="range" min="1" max="100" value="50" class="slider" id="priceRange">
-    <p>Precio: <input type="number" id="priceInput" name="precio" value="50" min="1" max="100"></p>
+    <div id="select_price">
+        <div>
+            <span>Escoger precio</span>
+            <input type="radio" id="pay" name="select_price_radio" value="pay">
+        </div>
+        <div>
+            <span>Gratis</span>
+            <input type="radio" id="free" name="select_price_radio" value="free" checked>
+        </div>
+    </div>
+
+    <div id="pay_price_container"></div>
+    
+    <input id="add_tag_input" type="text" placeholder="tag" maxlength="20">
+    <button type="button" id="add_tad_button">Añadir tag</button>
+    <div id="tags_container">
+        <input type="hidden" name="input_tags_values" id="input_tags_values">
+    </div>
+    
     <button type="Submit">Crear curso</button>
 </form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+  
+
 <script>
+
+// -------------Funciones para escoger precio o gratis---------
+
+    let pay = document.getElementById("pay")
+    let free = document.getElementById("free")
+    let pay_price_container = document.getElementById("pay_price_container")
+
+    pay.addEventListener("click", function(){pay_course(true)})
+    free.addEventListener("click", function(){pay_course(false)})
+
+    let pay_price_container_content=`
+        <div id="slider"></div>
+        <input type="number" id="sliderValue" min="1" max="700" value="1" name="price">
+        <span>El precio debe ser minimo de 1€ y máximo 700€</span>
+    `
+    function pay_course(check) {
+       if(check===true){
+            pay_price_container.innerHTML=pay_price_container_content
+            funcionalidad_precio()
+       }else{
+            pay_price_container.innerHTML=""
+       }
+    }
+
+
+// -------------Funciones para las tags---------
+
+    let tags_array = []
+    let tag_input = document.getElementById("add_tag_input")
+    let tag_button = document.getElementById("add_tad_button")
+    let tag_container = document.getElementById("tags_container")
+    let hidden_input = document.getElementById('input_tags_values')
+
+    tag_button.addEventListener("click", function(){add_tag()})
+
+    function add_tag(){
+
+        //Consegimos el valor del input text y lo dejamos en blanco
+        let input_val = tag_input.value
+        tag_input.value=""
+
+        //Si no está vacio, o no se encuentra ya en el array, procedemos
+        if (input_val && !tags_array.includes(input_val)){
+
+            //Lo metemos en el array y añadimos su valor al input hidden para pasarlo en la petición mas fácilmente
+            tags_array.push(input_val) 
+            hidden_input.value = JSON.stringify(tags_array)
+
+            let newtag = document.createElement("div")
+            let newtag_content = document.createElement("p")
+            let newtag_icon = document.createElement("i")
+
+            var number = tag_container.children.length
+
+            newtag.classList.add("unit_tag")
+            newtag.id=number
+            newtag_icon.classList.add("fa-solid", "fa-circle-xmark")
+
+            newtag_content.textContent=input_val
+            //añadimos funcion al i para que elimine su div y el valor del array
+            newtag_icon.addEventListener("click", function(){remove_tag(number,input_val)})
+
+            //Lo añadimos visualmente al div contenedor
+            newtag.appendChild(newtag_content)
+            newtag.appendChild(newtag_icon)
+            tag_container.appendChild(newtag)
+        }
+    }
+
+    function remove_tag(number,valor){
+        let tag_div=document.getElementById(number)
+        tag_div.remove()
+        // Quitamos del array el valor del div que hemos eliminado y lo igualamos al input hidden
+        tags_array = tags_array.filter(item => item !== valor)
+        hidden_input.value = JSON.stringify(tags_array)
+    }
 
 // -------------Funciones para el select---------
     let datos=<%- JSON.stringify(jsonData) %>;
@@ -46,15 +145,15 @@
         }else{
             //Si es otra cosa, quita lo anterior para añadir lo nuevo
             class_container.innerHTML=""
-            class_container.innerHTML="<select id='class_select'></select>"
+            class_container.innerHTML="<select id='class_select' name='class_select'></select>"
             let class_select = document.getElementById("class_select")
 
             //Crea una opcion por cada dato del array
             for (let i=0; i<datos[category_val].length; i++) {
                 
                 var option = document.createElement("option")
-                option.value = datos[category_val][i];
-                option.text = datos[category_val][i];
+                option.value = datos[category_val][i]
+                option.text = datos[category_val][i]
 
                 class_select.appendChild(option)
             }
@@ -64,22 +163,29 @@
 
     change_select()
 
-    //----------Slider de precio-----------
-    const slider = document.getElementById("priceRange");
-    const priceInput = document.getElementById("priceInput");
+    // -------------Funciones para el precio CON JQUERY---------
+    // Slider
+    function funcionalidad_precio(){
+        $(document).ready(function(){
+            var slider = $("#slider").slider({
+            min: 0, max: 700,
+            slide: function(event, contenedor){
+                // Añade el valor a el input number
+                $("#sliderValue").val(contenedor.value)
+            }
+            })
 
-    slider.oninput = function() {
-    priceInput.value = this.value;
-    };
-
-    priceInput.oninput = function() {
-    let price = parseInt(this.value);
-    if (!isNaN(price)) {
-        price = Math.min(Math.max(price, parseInt(slider.min)), parseInt(slider.max));
-        priceInput.value = price;
-        slider.value = price;
+            // input number
+            $("#sliderValue").on("input", function(){
+                // Añade el valor a el slider
+                var value = parseInt($(this).val())
+                slider.slider("value", value)
+            })
+        })
     }
-    };
+
 </script>
+
+
 
 <%- include("../partials/end.ejs") -%>
