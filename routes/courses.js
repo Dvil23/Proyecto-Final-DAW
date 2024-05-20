@@ -29,14 +29,67 @@ router.get('/', (req, res) => {
 
 router.get('/new', (req, res) => {
   fs.readFile('./public/data/classes.json', 'utf8', (err, data) => {
-    const jsonData = JSON.parse(data);
-    res.render('courses/new', { jsonData: jsonData });
+    const jsonData = JSON.parse(data)
+    res.render('courses/new', { jsonData: jsonData })
   });
 });
 
+router.get('/watch/:id', (req, res) => {
+  let course_id = req.params.id
+  let user_id = req.session.user.id
+
+  if (user_id===undefined){ res.redirect('/login') }
+
+  let consulta_select= "SELECT * FROM courses WHERE id = ?"
+
+
+  db.query(consulta_select, [course_id], (error, results_course) => {
+
+    if (results_course.length === 0) { //Si no existe el curso
+
+      return res.status(404).send('Curso no encontrado')//CAMBIAR A NOT FOUND
+
+    } else{ //Si existe el curso
+      let course = results_course[0]
+      let course_tags= JSON.parse(course.tags) //Convertir las tags en un array
+
+      let consulta_check = "SELECT * FROM user_course WHERE course_id = ? AND user_id = ?"
+      db.query(consulta_check, [course_id,user_id], (error, results) => {
+
+        //Sacar precio con descuento si lo tiene
+        let price_discount=0
+        if(Math.trunc(course.discount)!==0){ 
+          price_discount = course.price - ((course.price * course.discount ) / 100)
+        }
+
+        //Variable para ver si le pertenece el curso
+        let is_owned=false
+        if ( results_course[0].owner_id==user_id ){ is_owned=true}
+
+        //Variable para ver si lo has comprado
+        let is_bought=false
+        if ( results.length !==0){ is_bought=true}
+
+        //Variable con rating que le ha dado si lo ha comprado y le ha hecho una review
+        let p_rating=0
+        if(is_bought && results[0].personal_rating!==0){ p_rating = results[0].personal_rating}
+
+        let consulta_get = "SELECT * FROM user_course WHERE course_id = ?"
+        db.query(consulta_get, [course_id],(error, results_reviews)=>{
+
+          let reviews = results_reviews
+          console.log(reviews.length)
+          res.render('courses/watch',{course, reviews, course_tags, is_owned, is_bought, p_rating, price_discount})
+        
+        })
+      })
+    }
+  })
+})
+
 router.get('/subscriptions', (req, res) => {
-    res.render('courses/subscriptions')
-});
+  res.render('courses/subscriptions')
+})
 
 router.post('/new', (req, res) => {
   let { title,description,category, class_select,select_price_radio } = req.body

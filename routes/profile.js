@@ -23,8 +23,32 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get('/', (req, res) => {
-    res.render('profile')
+router.get('/', async (req, res) => {
+    if (!req.session.user || !req.session.user.id) {
+        return res.redirect('/login')
+    }
+    const ownerId = req.session.user.id;
+    const consulta_check = "SELECT * FROM courses WHERE owner_id = ?";
+
+    try {
+        db.query(consulta_check, [ownerId], (error, results) => {
+          if (error) { //CAMBIAR
+            console.error('Error al realizar la consulta:', error);
+            return res.status(500).send('Error al obtener los cursos');
+          }
+    
+          res.render('profile', { courses: results });
+        });
+      } catch (error) { //CAMBIAR
+        console.error('Error en el try/catch:', error);
+        res.redirect('/');
+        return;
+      }
+});
+
+router.post('/:id', (req, res) => {
+    let course_id = req.params.id;
+    res.redirect(`/courses/watch/${course_id}`);
 });
 
 router.get('/account', (req, res) => {

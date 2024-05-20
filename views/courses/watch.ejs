@@ -1,0 +1,101 @@
+<%- include("../partials/start.ejs") -%>
+
+<%- include("../partials/header.ejs") -%>
+
+<h1>Ver curso</h1>
+<div>
+    <h1><%= course.title %></h1>
+    <p><%= course.description %></p>
+    <div>
+        <span>Clase: <%= course.class %></span>
+        <span>Categoria: <%= course.category %></span>
+    </div>
+    <div>
+        <span>Tags:</span>
+        <% course_tags.forEach(tag => { %>
+        <span> <%= tag %></span>
+        <% }); %>
+    </div>
+    <div>
+        
+
+        
+
+
+        <div>
+        <% for(let i=0; i<=5; i++){ %>
+            <% if (i<=course.rating) { %>
+                <i class="fa-solid fa-star"></i>
+                <% }else { %>
+                <i class="fa-regular fa-star"></i>
+                <% } %>
+            <% } %>
+        </div>
+
+
+
+        <div>
+        <% if( is_owned){ //Si es tu propio curso %>
+            <% if(reviews.length==1){%>
+            <span>Tú curso tiene <%= reviews.length %> review</span>
+            <% }else if(reviews.length===0){%>
+            <span>Tú curso aun no ha recibido ninguna review</span>
+            <% } else{ %>
+                <span>Tú curso tiene un total de <%= reviews.length %> reviews</span>
+            <% } %>
+
+
+        <% }else{ //Si no es tu curso %>
+            <% if(!is_bought){ //Si no lo has comprado%>
+
+                <% if( course.rating===0){ //Si es 0 %>
+                    <span>Este curso aún no ha recibido ninguna review </span>
+        
+                <% }else{ //Si NO es 0 %>
+                <span>Número total de reviews; <%= reviews.length %> </span>
+                <span>Adquiere el curso para dejar una tú también </span>
+                <% } %>
+
+            <% } else{  //Si lo has comprado%>
+                <% if (course.rating===0){ //Si es 0 %>
+                    <span>Este curso aún no ha recibido ninguna review</span>
+                    <span>¡Se tú el primero en hacerlo!</span>
+
+                <% }else if(p_rating===0){ //NO ha hecho review %>
+                    <span>Número total de reviews; <%= reviews.length %> </span>
+                    <span>¡Puedes dejar una tú también para ayudar a otros usuarios!</span>
+                        
+                <% }else if(p_rating !==0){ //SÍ ha hecho review %>
+                <span>Número total de reviews; <%= reviews.length %> </span>
+    
+                    <% if(p_rating===1){ //Si la valoración es 1, te lo muestra en singular %>
+                    <span>Tu valoración actual es <%= p_rating %> estrella</span>
+                    <% }else{ //Si la valoración es más, te lo muestra en plural %>
+                    <span>Tu valoración actual son <%= p_rating %> estrellas</span>
+                    <% } %>
+                <% } %>
+            <% } %>
+        <% } %>
+        </div>
+
+        <div>
+            <% if (price_discount!==0){ //Si hay descuento, lo mostramos%>
+            <h4><s><%= course.price %>€</s></h4> 
+            <h2><%= price_discount %>€</h2>
+            <h2><%= course.discount %>% OFF</h2>
+
+            <% } else{ //Si no hay descuento, pone el precio talcual %> 
+            <h2><%= course.price %>€ </h2> 
+            <% } %>
+        </div>
+
+
+        <% if (!is_owned){ %>
+            <a href="courses/buy/<%= course.id %>">Comprar</a>
+        <% } %>
+
+        <span><%= course.total_purchases %> personas han comprado este curso</span>
+    </div>
+    
+</div>
+<%- include("../partials/end.ejs") -%>
