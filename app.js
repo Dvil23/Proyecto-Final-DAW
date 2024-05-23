@@ -23,6 +23,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/profile', profileRoutes);
 app.use('/courses', coursesRoutes);
+
+// Middleware para manejar errores
+app.use((err, req, res, next) => {
+  console.error(err.stack);  // Opcional: para registrar el error en la consola
+  res.redirect('/');
+});
+
+app.use((req, res, next) => {
+  res.status(404).render('404');
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

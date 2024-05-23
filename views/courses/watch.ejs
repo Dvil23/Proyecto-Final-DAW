@@ -23,11 +23,15 @@
 
 
         <div>
-        <% for(let i=0; i<=5; i++){ %>
-            <% if (i<=course.rating) { %>
-                <i class="fa-solid fa-star"></i>
-                <% }else { %>
-                <i class="fa-regular fa-star"></i>
+            <% if (reviews.length !== 0) { %>
+                <% for (let i = 0; i < 5; i++) { %>
+                    <% if (i < Math.floor(course.rating)) { %>
+                        <i class="fa-solid fa-star"></i>
+                    <% } else if (i === Math.floor(course.rating) && course.rating % 1 >= 0.5) { %>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                    <% } else { %>
+                        <i class="fa-regular fa-star"></i>
+                    <% } %>
                 <% } %>
             <% } %>
         </div>
@@ -52,7 +56,7 @@
                     <span>Este curso aún no ha recibido ninguna review </span>
         
                 <% }else{ //Si NO es 0 %>
-                <span>Número total de reviews; <%= reviews.length %> </span>
+                <span>Número total de reviews: <%= reviews.length %> </span>
                 <span>Adquiere el curso para dejar una tú también </span>
                 <% } %>
 
@@ -62,11 +66,11 @@
                     <span>¡Se tú el primero en hacerlo!</span>
 
                 <% }else if(p_rating===0){ //NO ha hecho review %>
-                    <span>Número total de reviews; <%= reviews.length %> </span>
+                    <span>Número total de reviews: <%= reviews.length %> </span>
                     <span>¡Puedes dejar una tú también para ayudar a otros usuarios!</span>
                         
                 <% }else if(p_rating !==0){ //SÍ ha hecho review %>
-                <span>Número total de reviews; <%= reviews.length %> </span>
+                <span>Número total de reviews: <%= reviews.length %> </span>
     
                     <% if(p_rating===1){ //Si la valoración es 1, te lo muestra en singular %>
                     <span>Tu valoración actual es <%= p_rating %> estrella</span>
@@ -90,12 +94,71 @@
         </div>
 
 
-        <% if (!is_owned){ %>
+        <% if (!is_owned && !is_bought){ %>
             <a href="courses/buy/<%= course.id %>">Comprar</a>
         <% } %>
 
         <span><%= course.total_purchases %> personas han comprado este curso</span>
     </div>
+
     
 </div>
+<% if (!is_owned && is_bought){ %>
+<form method="POST" action="/courses/comment_review/<%= course_id %>">
+    <h3>Dejar tu review</h3>
+    <input id="stars" type="hidden" name="stars" value="5">
+    <textarea name="review_description"><%= p_description %></textarea>
+    <div class="star-rating">
+        <% for(let i=0; i<5; i++){ %>
+            <% if (i<p_rating) { %>
+                <i class="fa-solid fa-star review_stars" data-value="<%= i+1 %>"></i>
+                <% }else { %>
+                <i class="fa-regular fa-star review_stars" data-value="<%= i+1 %>"></i>
+            <% } %>
+        <% } %>
+    </div>
+    <button type="submit">Publicar</button>
+</form>
+<% } %>  
+<br>
+<% count = 0; all_comments.forEach(comment=>{  %>
+    <div>
+        <h4><%= comment.username %></h4>    
+        <div>
+            <% for(let i=0; i<5; i++){ %>
+                <% if (i<comment.stars) { %>
+                    <i class="fa-solid fa-star <%= count+'-star' %>" data-value="<%= i+1 %>" @onclick='change_star( <%= i %> , <%= count+'-star' %> )'></i>
+                    <% }else { %>
+                    <i class="fa-regular fa-star <%= count+'-star' %>" data-value="<%= i+1 %>" @onclick='change_star( <%= i %> , <%= count+'-star' %> )'></i>
+                <% } %>
+            <% } %>
+        </div>
+        <p><%= comment.comment %></p>
+    </div>
+<% count += 1 })%>
+
+<script>
+    document.querySelectorAll('.review_stars').forEach(star => {
+        star.addEventListener('click', function() {
+            let number = this.getAttribute('data-value');
+            document.getElementById('stars').value=number
+            change_star(number,'.review_stars');
+        });
+    });
+
+    function change_star(number,unique_class) {
+        console.log("hola")
+        document.querySelectorAll(unique_class).forEach(star =>{
+            if (star.getAttribute('data-value') <= number){
+                star.classList.add('fa-solid');
+                star.classList.remove('fa-regular');
+            } else {
+                star.classList.add('fa-regular');
+                star.classList.remove('fa-solid');
+            }
+        })
+    }
+</script>
+
+
 <%- include("../partials/end.ejs") -%>
