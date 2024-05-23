@@ -93,7 +93,7 @@ router.get('/watch/:id', async (req, res) => {
   //Metemos en un array todas las compras con una review, con su nombre, estrellas y comentario
   let all_comments = [];
   for (const unique_rev of results_reviews) {
-    if (unique_rev.review != "") {
+    if (unique_rev.personal_rating !== 0) {
 
       let consulta_user = "SELECT * FROM users WHERE id = ?"
 
@@ -160,15 +160,26 @@ router.post('/comment_review/:id', async (req, res) => {
   // Conseguimos todas las reviews que no sean el default 0, y todas las estrellas menos la que ya habia puesto el usuario
   let total_reviews = 0
   let total_stars = 0
+  already=false
   results_all_purchases.forEach(review => {
 
     if (review.personal_rating !== 0) {
       total_reviews += 1;
-      if (review.user_id!=req.session.user.id){
-        total_stars += review.personal_rating
+      total_stars += review.personal_rating
+      if (review.user_id==req.session.user.id){
+        already=review.personal_rating
       }
     }
   });
+  
+  if (already!=false){  
+    //Si ya habia dado una valoración, tenemos que restar su antigua 
+    total_stars-=already
+  }else{
+    //Si no la ha dado, tenemos que añadir una al total
+    total_reviews+=1
+  }
+
   //Sumamos la nueva valoración
   total_stars += stars
   valoracion_final = total_stars/total_reviews
