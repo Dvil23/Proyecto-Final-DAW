@@ -1,9 +1,84 @@
 <%- include("../partials/start.ejs") -%>
-
+</head>
+<body>
 <%- include("../partials/header.ejs") -%>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<style>
+    .container,.container_regular_user{
+        display: grid;
+        grid-template-columns: repeat(4,1fr);
+        gap: 20px;
+        width: 200px;
+        min-height: 150px
+        
+        
+    }
+    .title_container{
+        background-color: lightblue;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        text-align: center;
+    }
+
+    .list {
+        border: 1px solid #ccc;
+        width: 200px;
+        min-height: 100px;
+        padding: 10px;
+        min-height: 90%;
+        
+        
+    }
+    .item {
+        border: 1px solid #000;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+        cursor: grab;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .item p{
+        margin-left: 5%
+    }
+    .item .icons{
+        font-size: small;
+        display: flex
+    }
+    .item .icons i{
+        margin-right: 5px;
+    }
+    .segmento{
+        border: 1px solid #ccc;
+        width: 200px;
+        min-height: 100px;
+        padding: 10px;
+        min-height: 90%
+    }
+    .componente{
+        border: 1px solid #000;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+    }
+  </style>
+
+
 
 <h1>Ver curso</h1>
 <div>
+
+    <% if (is_owned){ //Si es su curso, botón de editar%>
+    <a href="/courses/edit/<%= course_id %>">
+        <i class="fa-solid fa-pen-to-square"></i>
+        Editar curso
+    </a>
+    <% } %>
+
     <h1><%= course.title %></h1>
     <p><%= course.description %></p>
     <div>
@@ -17,8 +92,6 @@
         <% }); %>
     </div>
     <div>
-        
-
         
 
 
@@ -89,13 +162,17 @@
             <h2><%= course.discount %>% OFF</h2>
 
             <% } else{ //Si no hay descuento, pone el precio talcual %> 
-            <h2><%= course.price %>€ </h2> 
+                <% if(course.price == 0.00) { %>
+                    <h2>GRATIS</h2> 
+                <% }else{ %>
+                    <h2><%= course.price %>€ </h2> 
+                <% } %>
             <% } %>
         </div>
 
 
         <% if (!is_owned && !is_bought){ %>
-            <a href="courses/buy/<%= course.id %>">Comprar</a>
+            <button id="buyButton">Comprar</button>
         <% } %>
 
         <span><%= course.total_purchases %> personas han comprado este curso</span>
@@ -103,6 +180,8 @@
 
     
 </div>
+
+
 <% if (!is_owned && is_bought){ %>
 <form method="POST" action="/courses/comment_review/<%= course_id %>">
     <h3>Dejar tu review</h3>
@@ -121,6 +200,8 @@
 </form>
 <% } %>  
 <br>
+
+
 <span><b>Comentarios</b> <%= all_comments.length %></span>
 <% count = 0; all_comments.forEach(comment=>{  %>
     <div>
@@ -137,6 +218,304 @@
         <p><%= comment.comment %></p>
     </div>
 <% count += 1 })%>
+
+<% if (is_owned){ %>
+    <form method="POST" action="/courses/change_order/<%= course_id %>">
+        <input type="hidden" id="section_order" name="section_order">
+        <button type="submit">Confirmar cambios</button>
+        
+    </form>
+    <div>
+        <button id="add_new_section">Añadir sección</button>
+    </div>
+
+    <div class="container" >
+        <% for (let i=0;i<result_total_segments;i++){ %>
+            <div class="list_container">
+                <div class="title_container">
+                    <% if (i===0){ %>        
+                        <h1>Borradores</h1>
+                        <i class="fa-solid fa-plus" id="add_component_i"></i>
+                    <% }else{ %>
+                        <h1>Sección <%= i %></h1>
+                    <% } %>
+                </div>
+                <div class="list" id="list<%= i %>" value="<%= i %>">
+                    
+                    <% results_sections.forEach(component =>{ %>
+                        <% if(component.segment===i){ %>
+
+                        <div class="item" value="<%= component.id %>">
+                            <p><% if (i!==0){ %> <%= component.segment %>-<%= component.component %><% } %> <%= component.title %></p>
+                            <div class="icons">
+                                <i class="fa-solid fa-eye watch_component" value="<%= component.id %>"></i>
+                                <i class="fa-solid fa-trash del_component" value="<%= component.id %>"></i>
+                            </div>
+                            
+                        </div>
+
+                        <% } %>
+                    <% }) %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+<% }else{%>
+    
+    <%- include("../partials/see_sections.ejs") -%>
+
+<% } %>    
+
+<% if (is_owned){ %>
+<script src="/node_modules/sortablejs/Sortable.min.js"></script>
+<script>
+    //Funcion que realizarán cuando arrastres los componentes a otras secciones
+    function handleAdd(evt) {
+
+        let fromValue = evt.from.getAttribute('value');
+        let toValue = evt.to.getAttribute('value');
+        let itemValue = evt.item.getAttribute('value')
+        let itemIndex = section[fromValue].indexOf(itemValue)
+
+        //Lo añadimos al nuevo objeto del array
+        section[toValue].push(itemValue)
+        section[fromValue].splice(itemIndex,1)
+
+        //Lo movemos al indice que toca
+        let arr = section[toValue];
+        let [item] = arr.splice(arr.length-1, 1);
+        arr.splice(evt.newIndex, 0, item);
+
+        document.getElementById('section_order').value = JSON.stringify(section)
+
+        console.log(section)
+    }
+    
+    //Funcion que realizarán cuando cambies de lugar un componente en una seccion
+    function handleDrag(evt) {
+        let fromValue = evt.from.getAttribute('value');
+        let toValue = evt.to.getAttribute('value');
+        let itemValue = evt.item.getAttribute('value')
+        let itemIndex = section[toValue].indexOf(itemValue)
+
+        if (toValue===fromValue){
+            let arr = section[toValue];
+            let [item] = arr.splice(evt.oldIndex, 1);
+            arr.splice(evt.newIndex, 0, item);
+            document.getElementById('section_order').value = JSON.stringify(section)
+            console.log(section)
+        }
+        
+    }
+    
+    //Añadir seccion a array y como div
+    function add_section(){
+        total_length= Object.keys(section).length
+        section[total_length]=[]
+
+        let container = document.getElementsByClassName('container')
+        let list_container = document.createElement('div')
+        list_container.classList.add('list_container')
+        let title_container = document.createElement('div')
+        title_container.classList.add('title_container')
+
+        let title = document.createElement('h1')
+        title.textContent=`Sección ${total_length}`
+        title_container.appendChild(title)
+        list_container.appendChild(title_container)
+
+        let new_list = document.createElement('div')
+        new_list.classList.add('list')
+        new_list.setAttribute('value',total_length)
+        new_list.id=`list${total_length}`
+        list_container.appendChild(new_list)
+
+        container[0].appendChild(list_container)
+        newSortable(`list${total_length}`)
+
+
+    }
+
+    // Añadir un componente a los borradores (lo llama sweetalert)
+    function add_component(value){
+        let item = document.createElement('div')
+        item.classList.add('item')
+        item.setAttribute('value',`new-${value}`)
+
+        let text = document.createElement('p')
+        text.textContent=value
+        item.appendChild(text)
+
+        document.getElementById("list0").appendChild(item)
+        section[0].push(`new-${value}`)
+        document.getElementById('section_order').value = JSON.stringify(section)
+    }
+
+    // Brindar a los divs la función de dragear los items
+    function newSortable(id){
+
+        new Sortable(document.getElementById(id), {
+            group: 'shared',
+            animation: 150,
+            onEnd: handleDrag, // Evento que se dispara cuando termina el arrastre
+            onAdd: handleAdd, // Evento que se dispara cuando un ítem es añadido
+        });
+    }
+
+    //Confirmar el borrar de un componente, y si lo borra, ponerle del- en el array para indicar que debe ser borrado
+    function del_component(value){
+        console.log(section)
+        Swal.fire({
+            confirmButtonText: `Borrar`,
+            html: `
+                <h3>¿Quieres borrar permanentemente este componente?</h3>
+                <p>Si tiene un video asignado, también se perderá para siempre.</p>
+                <span>Los cambios surtiran efectos una vez guardes los cambios</span>
+            `,
+            showCancelButton: true, 
+            cancelButtonText: 'Cancelar',
+            //Esto es animate.css
+            showClass: { popup: `animate__animated animate__faster animate__headShake`},
+            hideClass: { popup: `animate__animated animate__fadeOutDown animate__faster ` }
+        }).then((result) => {
+            if (result.isConfirmed) { //Borrar el div y de la lista si se confirma
+                
+                let div = document.querySelector(`div.item[value="${value}"]`);
+                div.remove()
+                
+                for (const key of Object.keys(section)) {
+                    const index = section[key].findIndex(component => component === value);
+                    if (index !== -1) {
+                        section[key][index] = `del-${value}`
+                        break 
+                    }
+                }
+                document.getElementById('section_order').value = JSON.stringify(section)
+            }
+        });
+    }
+
+    let section={};
+
+    <% for (let i=0;i<result_total_segments;i++){ %>
+
+        // Añadimos la función de arrastrar a todos los divs 
+        newSortable('list<%= i %>')
+        // Creamos un nuevo indice con un array vacio por cada sección que haya
+        section[<%= i %>]=[]
+
+    <% } %>
+
+
+    // Metemos los componentes en el array, en el indice que sea cada uno
+
+    <% results_sections.forEach(component=>{ %>
+
+        section[<%= component.segment %>].push( '<%= component.id %>' )
+
+    <% }) %>
+
+    // Ponemos el array en un input hidden para despues pasarlo a express
+    document.getElementById('section_order').value = JSON.stringify(section)
+
+    // Creamos copia del original
+    let original_section = JSON.parse(JSON.stringify(section))
+
+    // Le ponemos al botón de añadir sección su función
+    document.getElementById('add_new_section').addEventListener('click',()=>{
+        add_section()
+    })
+
+    // Le ponemos al botón de borra componente su función
+    document.addEventListener("DOMContentLoaded", function() {
+        let icons = Array.from(document.getElementsByClassName('del_component'));
+
+        icons.forEach(icon => {
+            icon.addEventListener('click', () => {
+                del_component(icon.getAttribute('value'));
+            });
+        });
+    });
+
+    //Botón de ver detalles. Si no has hecho cambios, te envia directamente
+    //Si has hecho cambios, te pide confirmación antes de ir
+    document.addEventListener("DOMContentLoaded", function() {
+        let icons = Array.from(document.getElementsByClassName('watch_component'));
+
+        icons.forEach(icon => {
+            
+            icon.addEventListener('click', () => {
+                if (JSON.stringify(original_section) === JSON.stringify(section)){
+                    let current_url=window.location.href;
+                    let new_url=current_url + '/'+ icon.getAttribute('value');
+                    window.location.href = new_url;
+                }else{
+                    Swal.fire({
+                        confirmButtonText: `Ir`,
+                        showCancelButton: true, 
+                        cancelButtonText: 'Cancelar',
+                        html: `
+                            <p>¿Seguro que quieres ver los detalles?<p>
+                            <span>Los cambios sin guardar perderán</span>
+                        `,
+                        focusConfirm: false,
+                    }).then((result)=>{
+                        if (result.isConfirmed){
+                            let current_url=window.location.href;
+                            let new_url=current_url + '/'+ icon.getAttribute('value');
+                            window.location.href = new_url;
+                        }
+                    })
+                }
+            });
+        });
+    });
+
+    //Le ponemos al botón de añadir componente en borradores su función
+    document.addEventListener('DOMContentLoaded', function () {
+        var btn = document.getElementById("add_component_i");
+        if (btn){
+            btn.onclick = function() {
+                Swal.fire({
+                    confirmButtonText: `Crear`,
+                    html: `
+                        <label for="cardNumber">Nombre del nuevo borrador</label>
+                        <input type="text" id="draft_name" name="draft_name" class="swal2-input" required>
+                    `,
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const draft_name = Swal.getPopup().querySelector('#draft_name').value;
+                        
+                        if (!draft_name) {
+                            Swal.showValidationMessage(`Tu borrador debe tener un nombre.`);
+                            return false
+                        }
+
+                        let items = document.getElementsByClassName('item')
+                        let itemsArray = Array.from(items);
+
+                        itemsArray.forEach(item => {
+                            if (item.getAttribute('value') == 'new-'+draft_name) {
+                                Swal.showValidationMessage('Ya existe un componente con ese nombre.');
+                                return false;
+                            }
+                        });
+
+                        return { draft_name: draft_name };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed){
+                        add_component(draft_name.value)
+                    }
+                });
+            }
+        }
+    });
+    
+    
+</script>
+<% } %>
+
 
 <script>
     document.querySelectorAll('.review_stars').forEach(star => {
@@ -160,6 +539,53 @@
         })
     }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.getElementById("buyButton");
+    if (btn){
+        btn.onclick = function() {
+        Swal.fire({
+            title: 'Datos de la Tarjeta de Crédito',
+            html: `
+                <form id="paymentForm">
+                    <label for="cardNumber">Número de Tarjeta</label>
+                    <input type="text" id="cardNumber" name="cardNumber" class="swal2-input" required>
+                    
+                    <label for="expiryDate">Fecha de Expiración</label>
+                    <input type="text" id="expiryDate" name="expiryDate" class="swal2-input" required>
+                    
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" name="cvv" class="swal2-input" required>
+                </form>
+            `,
+            focusConfirm: false,
+            preConfirm: () => {
+                const cardNumber = Swal.getPopup().querySelector('#cardNumber').value;
+                const expiryDate = Swal.getPopup().querySelector('#expiryDate').value;
+                const cvv = Swal.getPopup().querySelector('#cvv').value;
+                
+                if (!cardNumber || !expiryDate || !cvv) {
+                    Swal.showValidationMessage(`Por favor completa todos los campos`);
+                }
 
+                return { cardNumber: cardNumber, expiryDate: expiryDate, cvv: cvv };
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Se ha confirmado tu compra",
+                    icon: "success",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then(function() {
+                    window.location = "/courses/buy/<%= course_id %>";
+                });
+            }
+        });
+    }
+    }
+    
+});
+</script>
 
 <%- include("../partials/end.ejs") -%>

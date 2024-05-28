@@ -1,0 +1,22 @@
+<div class="container_regular_user">
+    <% for (let i=0;i<result_total_segments;i++){ %>
+        <% if(i!==0){%>
+            <div class="segmento">
+                
+                <% results_sections.forEach(component =>{ %>
+                    <% if(component.segment===i && component.video_name!== null && component.video_name!== ""){ %>
+
+                        <div class="componente">
+                            <% if(is_bought){ %>
+                            <a href="/courses/watch/<%= course_id %>/<%= component.id %>"><%= component.segment %>-<%= component.component %> <%= component.title %></a>
+                            <% }else{ %>
+                            <p><%= component.segment %>-<%= component.component %> <%= component.title %></p>
+                            <% } %>
+                        </div>
+
+                    <% } %>
+                <% }) %>
+            </div>
+        <% } %>
+    <% } %>
+</div>
