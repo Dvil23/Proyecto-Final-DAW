@@ -3,8 +3,13 @@ const express = require('express')
 const router = express()
 const fs = require('fs');
 
-require('dotenv').config()
 
+const multer  = require('multer')
+const upload = multer({ storage: multer.memoryStorage({ inMemory: true }) })
+
+
+require('dotenv').config()
+const { upload_to_server, delete_from_server } = require('../sshUpload');
 
 
 // libreria session y su configuración
@@ -47,14 +52,24 @@ router.use((req, res, next) => {
 });
 
 
-
 //-----------GET COURSES-----------
-router.get('/', (req, res) => {
-    res.render('courses')
+router.get('/', async (req, res) => {
+
+  let consulta_select = "SELECT * FROM courses";
+  let courses = await realizarConsulta(consulta_select,[]);
+
+  let consulta_select_users = "SELECT * FROM users WHERE id IN (SELECT owner_id FROM courses)";
+  let users = await realizarConsulta(consulta_select_users,[]);
+
+  fs.readFile('./public/data/classes.json', 'utf8', (err, data) => {
+    const jsonData = JSON.parse(data)
+    res.render('courses/courses_filter',{courses,users,jsonData})
+  });
+  
 });
 
 //-----------GET CREAR CURSO-----------
-router.get('/new', (req, res) => {
+router.get('/new', isAuthenticated, (req, res) => {
   //JSON con todas las clases que puede ser un curso
   fs.readFile('./public/data/classes.json', 'utf8', (err, data) => {
     const jsonData = JSON.parse(data)
@@ -144,6 +159,7 @@ router.get('/watch/:id', isAuthenticated, async (req, res) => {
   res.render('courses/watch', { course,reviews,course_tags,is_owned,is_bought,p_rating,price_discount,course_id,p_description,all_comments, results_sections, result_total_segments});
 })
 
+//-----------GET MIRAR SECCION DE CURSO ESPECIFICO-----------
 router.get('/watch/:course_id/:component_id', isAuthenticated, async (req, res) => {
   let course_id = req.params.course_id;
   let component_id = req.params.component_id;
@@ -163,7 +179,6 @@ router.get('/watch/:course_id/:component_id', isAuthenticated, async (req, res) 
     let user_course=await realizarConsulta(consulta_find_bought, [course_id,user_id])
     
     if (user_course.length === 0){
-      console.log("YOU DONT BELONG HERE!!!")
       res.redirect('/')
       return
     }
@@ -228,10 +243,23 @@ router.get('/edit/:id', isAuthenticated, async (req, res) => {
 //-----------GET EDITAR SECCIÓN DE CURSO-----------
 router.get('/edit/:course_id/:component_id', isAuthenticated, async (req, res) => {
   let course_id = req.params.course_id;
+  let component_id = req.params.component_id;
   let user_id = req.session.user.id
 
-
+  let consulta_find = "SELECT * FROM courses WHERE id = ?";
+  let course=await realizarConsulta(consulta_find, [course_id])
+  course= course[0]
   
+  if (course.owner_id!==user_id){
+    res.redirect('/')
+    return
+  }
+
+  let consulta_find_section = "SELECT * FROM sections WHERE id = ?";
+  let section=await realizarConsulta(consulta_find_section, [component_id])
+  section= section[0]
+
+  res.render(`courses/section/edit_component`,{course,section})
 })
 
 
@@ -314,9 +342,46 @@ router.post('/new', (req, res) => {
     }
   );
 
-  res.redirect('/courses/new')
+  res.redirect('/profile')
 });
+
+//-----------POST EDITAR COMPONENTE-----------
+router.post('/edit/:course_id/:component_id', upload.single('file'), isAuthenticated, async (req, res) => {
+  let course_id = req.params.course_id;
+  let component_id = req.params.component_id
+  let { title,description} = req.body
+  let file = req.file
+
+  let consulta_select="SELECT * FROM sections WHERE id = ?"
+  let seccion = await realizarConsulta(consulta_select, [component_id]);
+  seccion=seccion[0]
+
+  console.log("FILE: ", file)
   
+  
+
+  if (file!== undefined){
+
+    let folderName = req.session.user.id
+    
+    let file_name= `${component_id}-video`
+    await upload_to_server(folderName, req.file, file_name);
+
+    let consulta_update_video="UPDATE sections SET video_name = ? WHERE id = ?"
+    await realizarConsulta(consulta_update_video, [file_name,component_id]);
+  }
+
+  
+
+  if (seccion.title !== title || seccion.description !== description){
+    let consulta_update="UPDATE sections SET title = ?, description = ? WHERE id = ?"
+    await realizarConsulta(consulta_update, [title,description,component_id]);
+  }
+
+  res.redirect(`/courses/watch/${course_id}/${component_id}`)
+});
+
+
 //-----------POST DEJAR REVIEW Y ESTRELLAS-----------
 router.post('/comment_review/:id', async (req, res) => {
   const { list1, list2 } = req.body;
@@ -394,8 +459,24 @@ router.post('/change_order/:id', async (req, res) => {
       else if (component.startsWith('del-')){
         console.log("DEL", component)
         let formatted_string = component.slice(4)
+
+        let find_component = "SELECT * FROM sections  WHERE id = ?";
+        let found_component= await realizarConsulta(find_component, [formatted_string]);
+        let video_name= found_component[0].video_name
+
+        if (video_name!==null && video_name!==""){ 
+
+          //Borrar video de nuestro servidor
+          let find_course = "SELECT * FROM courses WHERE id = ?";
+          let found_course= await realizarConsulta(find_course, [course_id]);
+          let owner_id = found_course[0].owner_id
+          
+          await delete_from_server(owner_id, video_name)
+        }
         let remove_component = "DELETE FROM sections  WHERE id = ?";
         await realizarConsulta(remove_component, [formatted_string]);
+
+
       }
       //TODO LO DEMAS LE HACE UPDATE PARA CAMBIARLOS DE SITIO
       else{

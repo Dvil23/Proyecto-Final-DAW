@@ -17,7 +17,7 @@
 <div>
    <% courses.forEach(course => { %>
       <form action="/profile/<%= course.id %>" method="POST">
-         <h1><%= course.title %>, <%= course.id %></h1>
+         <h1><%= course.title %></h1>
          <button type="submit">Ver</button>
       </form>
    <% }); %>

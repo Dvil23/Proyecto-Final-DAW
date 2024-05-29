@@ -1,0 +1,33 @@
+<%- include("../../partials/start.ejs") -%>
+</head>
+<body>
+<%- include("../../partials/header.ejs") -%>
+
+<h1><%= course.title %></h1>
+<h3><%= section.segment %>-<%= section.component %> <%= section.title %> </h3>
+<p><%= section.description %></p>
+
+<form action="/courses/edit/<%= course.id %>/<%= section.id %>" method="post" enctype="multipart/form-data">
+
+    <input type="text" name="title" value="<%= section.title %>" placeholder="Titulo">
+    <textarea name="description" placeholder="Descripción"><%= section.description %></textarea>
+
+    <div>
+    <% if (section.video_name!=="" && section.video_name!==null){ %>
+        <span>Ya has subido un video. Selecciona archivo para reemplazarlo</span>  
+    <% }else{ %>
+        <span>No se ha proporcionado un video, selecciona archivo para subirlo.</span>
+    <% } %>
+    </div>
+
+    <div>
+        <input type="file" name="file">
+    </div>
+    <button type="submit">Subir Video</button>
+</form>
+
+
+
+
+
+<%- include("../../partials/end.ejs") -%>
