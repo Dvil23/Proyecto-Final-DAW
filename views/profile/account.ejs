@@ -1,23 +1,69 @@
 <%- include("../partials/start.ejs") -%>
+<link rel="stylesheet" href="/stylesheets/edit_profile.css" class="css">
 </head>
 <body>
 
 <%- include("../partials/header.ejs") -%>
 
-<form action="/profile/account" method="post">
-    <h3>Cambiar datos de la cuenta</h3>
-    <img src="/images/<%= user.pfp %>.jpg">
-    <input type="text" name="username_form" value=<%= username %>>
-    <input type="text" name="phone_form" value=<%= phone %>>
-    <% if(type==0){ %>
-    <p>Actualmente eres un usuario corriente</p>
-    <span>Accede a muchos más cursos obteniendo la versión PRO <a href="/plans">aquí</a></span>
-    <% }else{ %>
-    <p>Eres un usuario PRO</p>
-    <span>Cancela tu subscripción <a href="/plans">aquí</a></span>
-    <%}%>
-    <span> <%= message %></span>
-    <button type="submit">Confirmar cambios</button>
+<form action="/profile/account" method="post" id="main_page">
+    <div class="video-background">
+        <video autoplay loop muted>
+            <source src="/images/tech-background.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="color_tint"></div>
+    <div id="page_content">
+        <div class="half_unit">
+            <div class="unit_content">
+                <h1>Cambiar tus datos de usuario</h1>
+            </div>
+            <div class="unit_content">
+                <p>Nombre de usuario</p>
+                <input type="text" name="username_form" value=<%= username %>>
+            </div>
+            <div class="unit_content">
+                <p>Biografía</p>
+                <textarea type="text" name="biography"></textarea>
+            </div>
+            <div class="unit_content">
+                <p>Teléfono</p>
+                <input type="text" name="phone_form" value=<%= phone %>>
+            </div>
+
+        </div>
+        <div class="half_unit" id="der">
+            <div class="unit_image">
+                <div class="image_container">
+                    <img src="/images/<%= user.pfp %>.jpg">
+                </div>
+                <div class="insert_file">
+                    <p>Nueva foto de perfil</p>
+                    <input type="file">
+
+                </div>
+
+            </div>
+            <div class="unit_content" style="padding-bottom: 5vh">
+                <p>Nueva contraseña</p>
+                <input type="password" placeholder="Nueva contraseña" name="pass_form">
+                <span>Dejar en blanco ambos campos si no se desea cambiar</span>
+                
+            </div>
+            <div class="unit_content">
+                <p>Repetir contraseña</p>
+                <input type="password" placeholder="Repetir contraseña" name="pass_form_repeat">
+                <span> <%= message %></span>
+                
+            </div>
+
+            <div class="unit_content alone_button">
+                <button type="submit" class="full_yellow_button">Confirmar cambios</button>
+            </div>
+
+        </div>
+    </div>
+
 </form>
+
 
 <%- include("../partials/end.ejs") -%>

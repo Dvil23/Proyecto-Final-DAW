@@ -1,0 +1,188 @@
+#main_page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 92vh;
+}
+#main_page .video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  z-index: -3;
+}
+#main_page .video-background video {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+#main_page .color_tint {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 38, 34, 0.8431372549);
+  z-index: -2;
+}
+#main_page #page_content {
+  width: 100%;
+  height: 70vh;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: #133B35;
+}
+#main_page #page_content .half_unit {
+  height: -moz-fit-content;
+  height: fit-content;
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#main_page #page_content .half_unit .unit_content {
+  min-height: 7vh;
+  margin-bottom: 3vh;
+  width: 100%;
+}
+#main_page #page_content .half_unit .unit_content h1 {
+  color: #E9B44C;
+  font-size: x-large;
+  text-align: center;
+}
+#main_page #page_content .half_unit .unit_content p, #main_page #page_content .half_unit .unit_content span {
+  color: #fffffa;
+  font-size: large;
+  margin-left: 1vh;
+}
+#main_page #page_content .half_unit .unit_content span {
+  font-size: small;
+}
+#main_page #page_content .half_unit .unit_content input, #main_page #page_content .half_unit .unit_content textarea {
+  width: 100%;
+  min-height: 5vh;
+  background-color: #fffffa;
+  border-radius: 15px;
+  border: none;
+  padding-left: 3%;
+  padding-right: 3%;
+  outline: none;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+#main_page #page_content .half_unit .unit_content textarea {
+  min-height: 20vh;
+  resize: none;
+}
+#main_page #page_content .half_unit .alone_button {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+#main_page #page_content .half_unit .alone_button button {
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+#main_page #page_content #der {
+  height: 100%;
+  min-height: 100%;
+  width: 45%;
+  background-color: #70A288;
+  margin-left: 2vw;
+}
+#main_page #page_content #der .unit_content {
+  width: 80%;
+}
+#main_page #page_content #der .unit_image {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+}
+#main_page #page_content #der .unit_image .image_container {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+}
+#main_page #page_content #der .unit_image .image_container:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+#main_page #page_content #der .unit_image .image_container img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  border-radius: 100%;
+}
+#main_page #page_content #der .unit_image .insert_file {
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+}
+#main_page #page_content #der .unit_image .insert_file p {
+  width: 100%;
+  text-align: center;
+  color: #fffffa;
+  font-size: large;
+  margin-left: 1vh;
+  margin-bottom: 2vh;
+}
+
+@media only screen and (max-width: 768px) {
+  #main_page #page_content {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    min-height: 92vh;
+    height: -moz-fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+  #main_page #page_content .half_unit {
+    margin-top: 5vh;
+    width: 90%;
+    height: 100%;
+    min-height: -moz-fit-content;
+    min-height: fit-content;
+  }
+  #main_page #page_content .half_unit .unit_content {
+    margin-bottom: 1vh;
+  }
+  #main_page #page_content .half_unit .unit_content textarea {
+    min-height: 10vh;
+  }
+  #main_page #page_content #der {
+    height: 100%;
+    width: 100%;
+    margin-left: 0;
+    min-height: 70vh;
+    max-height: -moz-fit-content;
+    max-height: fit-content;
+  }
+  #main_page #page_content #der .unit_image {
+    margin-top: 2vh;
+    height: -moz-fit-content;
+    height: fit-content;
+  }
+  #main_page #page_content #der .unit_content {
+    height: 10vh;
+    max-height: -moz-fit-content;
+    max-height: fit-content;
+    margin-top: 3vh;
+  }
+  #main_page #page_content #der .unit_content button {
+    margin-bottom: 2vh;
+  }
+}/*# sourceMappingURL=edit_profile.css.map */

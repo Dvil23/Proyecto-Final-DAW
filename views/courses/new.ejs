@@ -1,50 +1,112 @@
 <%- include("../partials/start.ejs") -%>
-<link rel="stylesheet" href="/stylesheets/new_course.css">
+
+<link rel="stylesheet" href="/stylesheets/form_style.css">
 </head>
 <body>
 
 <%- include("../partials/header.ejs") -%>
 
-<h3>Crear nuevo curso</h3>
 
-<form id="courseForm" method="POST" action="/courses/new">
+<form id="main_page" method="POST" action="/courses/new">
 
-    <input type="text" placeholder="Titulo" name="title" required>
-    
-    <textarea palceholder="Descripción" name="description" required></textarea>
-
-    <select id="category" name="category">
-        <% Object.keys(jsonData).forEach(category => { %>
-            <option value="<%= category %>"><%= category %></option>
-        <% }) %>
-    </select>
-
-    <div id="class_container">
-        <select id="class_select" name="class_select"></select>
+    <div class="video-background">
+        <video autoplay loop muted>
+            <source src="/images/tech-background.mp4" type="video/mp4">
+        </video>
     </div>
 
-    <div id="select_price">
-        <div>
-            <span>Escoger precio</span>
-            <input type="radio" id="pay" name="select_price_radio" value="pay">
+    <div class="color_tint"></div>
+    
+    <div id="banner">
+        <div id="image_container">
+            <img src="/images/office-work.png" alt="">
         </div>
-        <div>
-            <span>Gratis</span>
-            <input type="radio" id="free" name="select_price_radio" value="free" checked>
+        <div id="banner_content">
+            <h1>Crear un curso</h1>
+            <p>¡Comparte tus conocimientos con los demás!</p>
+        </div>
+        <div id="stripe">
+            
         </div>
     </div>
 
-    <div id="pay_price_container"></div>
-    
-    <input id="add_tag_input" type="text" placeholder="tag" maxlength="20">
-    <button type="button" id="add_tad_button">Añadir tag</button>
-    <div id="tags_container">
-        <input type="hidden" name="input_tags_values" id="input_tags_values">
+
+
+    <div id="page_content">
+
+        <div class="unit full">
+            <p>Titulo del curso</p>
+            <input type="text" placeholder="Titulo" name="title" style="width: 48%" required>
+        </div>
+
+        <div class="unit full">
+            <p>Descripción del curso</p>
+            <textarea type="text" placeholder="Describe toda la información necesaria sobre tú curso para que los usuarios sepan los temas que van a ser enseñados, la forma de aprendizaje o porqué adquirir y aprender este curso" name="description" required></textarea>
+        </div>
+
+        <div class="unit">
+            <div class="input_unit">
+                <p>Categoría</p>
+                <select id="category" name="category">
+                    <% Object.keys(jsonData).forEach(category => { %>
+                        <option value="<%= category %>"><%= category %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="input_unit">
+                <p>Clase específica</p>
+                <div id="class_container">
+                    <select id="class_select" name="class_select"></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit radio_button_container">
+            <div class="content_container">
+                <p>Precio:</p>
+                <div class="radio_buttons">
+                    <div class="unit_radio_button">
+                        <span>Escoger precio</span>
+                        <input type="radio" id="pay" name="select_price_radio" value="pay">
+                    </div>
+                    <div class="unit_radio_button right">
+                        <span>Gratis</span>
+                        <input type="radio" id="free" name="select_price_radio" value="free" checked>
+                    </div>
+                </div>
+            </div>
+            <div class="price_slider">
+                <div id="pay_price_container"></div>
+            </div>
+        </div>
+        
+        <div class="unit">
+            <div class="input_unit">
+                <p>Categoría</p>
+                <input id="add_tag_input" type="text" placeholder="tag" maxlength="20">
+            </div>
+            <div class="input_unit alone_button">
+                <p> // </p>
+                <button type="button" id="add_tad_button" class="full_yellow_button">Añadir tag</button>
+            </div>
+        </div>
+        <div class="unit full">
+            <div id="tags_container">
+                <input type="hidden" name="input_tags_values" id="input_tags_values">
+            </div>
+        </div>
+        <div class="unit">
+            <div class="input_unit"></div>
+            <div class="input_unit_alone_button">
+                <button type="Submit" class="full_yellow_button">Crear curso</button>
+            </div>
+        </div>
+        <div class="unit"></div>
     </div>
-    
-    <button type="Submit">Crear curso</button>
 </form>
 
+
+</section>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
   

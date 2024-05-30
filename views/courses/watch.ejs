@@ -1,259 +1,285 @@
 <%- include("../partials/start.ejs") -%>
+<link rel="stylesheet" href="/stylesheets/watch_course_style.css">
 </head>
 <body>
 <%- include("../partials/header.ejs") -%>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<section id="main_page">
 
-<style>
-    .container,.container_regular_user{
-        display: grid;
-        grid-template-columns: repeat(4,1fr);
-        gap: 20px;
-        width: 200px;
-        min-height: 150px
+    <div id="scroll_lock">
         
-        
-    }
-    .title_container{
-        background-color: lightblue;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        text-align: center;
-    }
-
-    .list {
-        border: 1px solid #ccc;
-        width: 200px;
-        min-height: 100px;
-        padding: 10px;
-        min-height: 90%;
-        
-        
-    }
-    .item {
-        border: 1px solid #000;
-        padding: 10px;
-        margin-bottom: 10px;
-        background-color: #f9f9f9;
-        cursor: grab;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .item p{
-        margin-left: 5%
-    }
-    .item .icons{
-        font-size: small;
-        display: flex
-    }
-    .item .icons i{
-        margin-right: 5px;
-    }
-
-  </style>
-
-
-
-<h1>Ver curso</h1>
-<div>
-
-    <% if (is_owned){ //Si es su curso, botón de editar%>
-    <a href="/courses/edit/<%= course_id %>">
-        <i class="fa-solid fa-pen-to-square"></i>
-        Editar curso
-    </a>
-    <% } %>
-
-    <h1><%= course.title %></h1>
-    <p><%= course.description %></p>
-    <div>
-        <span>Clase: <%= course.class %></span>
-        <span>Categoria: <%= course.category %></span>
-    </div>
-    <div>
-        <span>Tags:</span>
-        <% course_tags.forEach(tag => { %>
-        <span> <%= tag %></span>
-        <% }); %>
-    </div>
-    <div>
-        
-
-
-        <div>
-            <% if (reviews.length !== 0) { %>
-                <% for (let i = 0; i < 5; i++) { %>
-                    <% if (i < Math.floor(course.rating)) { %>
-                        <i class="fa-solid fa-star"></i>
-                    <% } else if (i === Math.floor(course.rating) && course.rating % 1 >= 0.5) { %>
-                        <i class="fa-solid fa-star-half-stroke"></i>
-                    <% } else { %>
-                        <i class="fa-regular fa-star"></i>
-                    <% } %>
-                <% } %>
-            <% } %>
-        </div>
-
-
-
-        <div>
-        <% if( is_owned){ //Si es tu propio curso %>
-            <% if(reviews.length==1){%>
-            <span>Tú curso tiene <%= reviews.length %> review</span>
-            <% }else if(reviews.length===0){%>
-            <span>Tú curso aun no ha recibido ninguna review</span>
-            <% } else{ %>
-                <span>Tú curso tiene un total de <%= reviews.length %> reviews</span>
-            <% } %>
-
-
-        <% }else{ //Si no es tu curso %>
-            <% if(!is_bought){ //Si no lo has comprado%>
-
-                <% if( course.rating===0){ //Si es 0 %>
-                    <span>Este curso aún no ha recibido ninguna review </span>
-        
-                <% }else{ //Si NO es 0 %>
-                <span>Número total de reviews: <%= reviews.length %> </span>
-                <span>Adquiere el curso para dejar una tú también </span>
-                <% } %>
-
-            <% } else{  //Si lo has comprado%>
-                <% if (course.rating===0){ //Si es 0 %>
-                    <span>Este curso aún no ha recibido ninguna review</span>
-                    <span>¡Se tú el primero en hacerlo!</span>
-
-                <% }else if(p_rating===0){ //NO ha hecho review %>
-                    <span>Número total de reviews: <%= reviews.length %> </span>
-                    <span>¡Puedes dejar una tú también para ayudar a otros usuarios!</span>
-                        
-                <% }else if(p_rating !==0){ //SÍ ha hecho review %>
-                <span>Número total de reviews: <%= reviews.length %> </span>
     
-                    <% if(p_rating===1){ //Si la valoración es 1, te lo muestra en singular %>
-                    <span>Tu valoración actual es <%= p_rating %> estrella</span>
-                    <% }else{ //Si la valoración es más, te lo muestra en plural %>
-                    <span>Tu valoración actual son <%= p_rating %> estrellas</span>
-                    <% } %>
-                <% } %>
-            <% } %>
-        <% } %>
-        </div>
-
-        <div>
-            <% if (price_discount!==0){ //Si hay descuento, lo mostramos%>
-            <h4><s><%= course.price %>€</s></h4> 
-            <h2><%= price_discount %>€</h2>
-            <h2><%= course.discount %>% OFF</h2>
-
-            <% } else{ //Si no hay descuento, pone el precio talcual %> 
-                <% if(course.price == 0.00) { %>
-                    <h2>GRATIS</h2> 
-                <% }else{ %>
-                    <h2><%= course.price %>€ </h2> 
-                <% } %>
-            <% } %>
-        </div>
-
-
-        <% if (!is_owned && !is_bought){ %>
-            <button id="buyButton">Comprar</button>
-        <% } %>
-
-        <span><%= course.total_purchases %> personas han comprado este curso</span>
-    </div>
-
     
-</div>
-
-
-<% if (!is_owned && is_bought){ %>
-<form method="POST" action="/courses/comment_review/<%= course_id %>">
-    <h3>Dejar tu review</h3>
-    <input id="stars" type="hidden" name="stars" value="5">
-    <textarea name="review_description"><%= p_description %></textarea>
-    <div class="star-rating">
-        <% for(let i=0; i<5; i++){ %>
-            <% if (i<p_rating) { %>
-                <i class="fa-solid fa-star review_stars" data-value="<%= i+1 %>"></i>
-                <% }else { %>
-                <i class="fa-regular fa-star review_stars" data-value="<%= i+1 %>"></i>
-            <% } %>
-        <% } %>
-    </div>
-    <button type="submit">Publicar</button>
-</form>
-<% } %>  
-<br>
-
-
-<span><b>Comentarios</b> <%= all_comments.length %></span>
-<% count = 0; all_comments.forEach(comment=>{  %>
-    <div>
-        <h4><%= comment.username %></h4>    
-        <div>
-            <% for(let i=0; i<5; i++){ %>
-                <% if (i<comment.stars) { %>
-                    <i class="fa-solid fa-star <%= count+'-star' %>" data-value="<%= i+1 %>" @onclick='change_star( <%= i %> , <%= count+'-star' %> )'></i>
-                    <% }else { %>
-                    <i class="fa-regular fa-star <%= count+'-star' %>" data-value="<%= i+1 %>" @onclick='change_star( <%= i %> , <%= count+'-star' %> )'></i>
-                <% } %>
-            <% } %>
-        </div>
-        <p><%= comment.comment %></p>
-    </div>
-<% count += 1 })%>
-
-<% if (is_owned){ %>
-    <form method="POST" action="/courses/change_order/<%= course_id %>">
-        <input type="hidden" id="section_order" name="section_order">
-        <button type="submit">Confirmar cambios</button>
+        <div id="main_content">
+            <div id="price_container">
+                <div id="price_content">
         
-    </form>
-    <div>
-        <button id="add_new_section">Añadir sección</button>
-    </div>
-    <button id="add_component_i"><i class="fa-solid fa-plus"></i>Añadir apartado</button>
-    
-    <div class="container" >
-        <% for (let i=0;i<result_total_segments;i++){ %>
-            <div class="list_container">
-                <div class="title_container">
-                    <% if (i===0){ %>        
-                        <h1>Borradores</h1>
-                        
-                    <% }else{ %>
-                        <h1>Sección <%= i %></h1>
-                    <% } %>
-                </div>
-                <div class="list" id="list<%= i %>" value="<%= i %>">
-                    
-                    <% results_sections.forEach(component =>{ %>
-                        <% if(component.segment===i){ %>
-
-                        <div class="item" value="<%= component.id %>">
-                            <p><% if (i!==0){ %> <%= component.segment %>-<%= component.component %><% } %> <%= component.title %></p>
-                            <div class="icons">
-                                <i class="fa-solid fa-eye watch_component" value="<%= component.id %>"></i>
-                                <i class="fa-solid fa-trash del_component" value="<%= component.id %>"></i>
-                            </div>
-                            
-                        </div>
-
+                    <div class="price_unit" id="price">
+        
+                        <% if (price_discount!==0){ //Si hay descuento, lo mostramos%>
+                            <h4><s><%= course.price %>€</s></h4> 
+                            <h2><%= price_discount %>€</h2>
+                            <h3><%= course.discount %>% OFF</h2>
+        
+                        <% } else{ //Si no hay descuento, pone el precio talcual %> 
+                                <% if(course.price == 0.00) { %>
+                                    <h2>GRATIS</h2> 
+                                <% }else{ %>
+                                    <h2><%= course.price %>€ </h2> 
+                                <% } %>
                         <% } %>
-                    <% }) %>
+                    </div>
+        
+                    <div class="price_unit" id="purchase">
+        
+                        <span><%= course.total_purchases %> personas han comprado este curso</span>
+                        <% if (!is_owned && !is_bought){ %>
+                            <button class="border_yellow_button" id="buyButton">Adquirir</button>
+                        <% }else if(!is_owned && is_bought){ %>
+                            <p class="border_yellow_button">Ya adquirido</p>
+                        <% }else if(is_owned){ %>
+                            <a href="/courses/edit/<%= course_id %>" class="border_yellow_button">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                Editar curso
+                            </a>
+                        <% } %>
+                    </div>
                 </div>
             </div>
-        <% } %>
-    </div>
-<% }else{%>
-    
-    <%- include("../partials/see_sections.ejs") -%>
+            <div id="image_header">
+                <div id="image_container">
+                    <img src="/images/ue-2.jpg" alt="">
+                </div>
+                <div id="title_container">
+                    <h1><%= course.title %></h1>
+                    <h3><%= course.class %></h3>
+                    <h3><%= course.category %></h3>
+                </div>
+                <div id="created_by">
+                    <span>Creado por:</span>
+                </div>
+            </div>
+            <div id="information_container">
+                <div id="score">
+                    <div>
+                        <% if (reviews.length !== 0) { %>
+                            <% for (let i = 0; i < 5; i++) { %>
+                                <% if (i < Math.floor(course.rating)) { %>
+                                    <i class="fa-solid fa-star"></i>
+                                <% } else if (i === Math.floor(course.rating) && course.rating % 1 >= 0.5) { %>
+                                    <i class="fa-solid fa-star-half-stroke"></i>
+                                <% } else { %>
+                                    <i class="fa-regular fa-star"></i>
+                                <% } %>
+                            <% } %>
+                        <% } %>
+                    </div>
+                    <div class="score_info">
+                        <% if( is_owned){ //Si es tu propio curso %>
+                            <% if(reviews.length==1){%>
+                            <span>Tu curso tiene <%= reviews.length %> review</span>
+                            <% }else if(reviews.length===0){%>
+                            <span>Tu curso aún no ha recibido ninguna review</span>
+                            <% } else{ %>
+                                <span>Tu curso tiene un total de <%= reviews.length %> reviews</span>
+                            <% } %>
+                
+                
+                        <% }else{ //Si no es tu curso %>
+                            <% if(!is_bought){ //Si no lo has comprado%>
+                
+                                <% if( course.rating==0){ //Si es 0 %>
+                                    <span>Este curso aún no ha recibido ninguna review </span>
+                        
+                                <% }else{ //Si NO es 0 %>
+                                <span>Número total de reviews: <%= reviews.length %> </span>
+                                <span>Adquiere el curso para dejar una tú también </span>
+                                <% } %>
+                
+                            <% } else{  //Si lo has comprado%>
+                                <% if (course.rating==0){ //Si es 0 %>
+                                    <span>Este curso aún no ha recibido ninguna review</span>
+                                    <span>¡Se tú el primero en hacerlo!</span>
+                
+                                <% }else if(p_rating==0){ //NO ha hecho review %>
+                                    <span>Número total de reviews: <%= reviews.length %> </span>
+                                    <span>¡Puedes dejar una tú también para ayudar a otros usuarios!</span>
+                                    <span><%= course.rating %></span>
+                                        
+                                <% }else if(p_rating !==0){ //SÍ ha hecho review %>
+                                <span>Número total de reviews: <%= reviews.length %> </span>
+                    
+                                    <% if(p_rating===1){ //Si la valoración es 1, te lo muestra en singular %>
+                                    <span>Tu valoración actual es <%= p_rating %> estrella</span>
+                                    <% }else{ //Si la valoración es más, te lo muestra en plural %>
+                                    <span>Tu valoración actual son <%= p_rating %> estrellas</span>
+                                    <% } %>
+                                <% } %>
+                            <% } %>
+                        <% } %>
+                    </div>
+                </div>
+                <div id="information">
+                    <div class="info_unit start">
+                        <p>Información:</p>
+                    </div>
+                    <div class="info_unit">
+                        <p><%= course.description %></p>
+                    </div>
+                    <div class="info_unit tags">
+                        <span>Tags:</span>
+                        <% course_tags.forEach(tag => { %>
+                        <span> <%= tag %></span>
+                        <% }); %>
+                    </div>
+                </div>
 
-<% } %>    
+                <% if (is_owned){ %>
+
+                <div id="edit_sections_container">
+                    <div id="edit_explanation">
+                        <h1>Edita y crea nuevos apartados</h1>
+                        <span>Esta ventana aparece gracias a que eres el creador del curso</span>
+                        <p>Arrastra, mueve, crea y elimina todos los apartados que quieras. Crea secciones para ordenarlos.<br>Los apartados en los borradores no serán visibles para el público</p>
+                    </div>
+                    
+                    <div id="edit_botones">
+                        <div class="botones_unidad">
+                            <button id="add_new_section" class="full_green_button"><i class="fa-solid fa-plus"></i>Añadir sección</button>
+                            <button id="add_component_i" class="full_green_button"><i class="fa-solid fa-plus"></i>Añadir apartado</button>
+                        </div>
+                        
+                        <form class="botones_unidad right" method="POST" action="/courses/change_order/<%= course_id %>">
+                            <input type="hidden" id="section_order" name="section_order">
+                            <button type="submit" class="full_yellow_button">Confirmar cambios</button>
+                            
+                        </form>
+                    </div>
+                    
+                
+                    
+                    
+                    
+                    <div class="container" >
+                        <% for (let i=0;i<result_total_segments;i++){ %>
+                            <div class="list_container">
+                                <div class="title_container">
+                                    <% if (i===0){ %>        
+                                        <h1>Borradores</h1>
+                                        
+                                    <% }else{ %>
+                                        <h1>Sección <%= i %></h1>
+                                    <% } %>
+                                </div>
+                                <div class="list" id="list<%= i %>" value="<%= i %>">
+                                    
+                                    <% results_sections.forEach(component =>{ %>
+                                        <% if(component.segment===i){ %>
+
+                                        <div class="item" value="<%= component.id %>">
+                                            <p><% if (i!==0){ %> <%= component.segment %>-<%= component.component %><% } %> <%= component.title %></p>
+                                            <div class="icons">
+                                                <i class="fa-solid fa-eye watch_component" value="<%= component.id %>"></i>
+                                                <i class="fa-solid fa-trash del_component" value="<%= component.id %>"></i>
+                                            </div>
+                                            
+                                        </div>
+
+                                        <% } %>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                
+                </div>
+                <% } %>
+                <div id="reviews_and_comments">
+
+                    <% if (!is_owned && is_bought){ %>
+                        <form method="POST" action="/courses/comment_review/<%= course_id %>" id="make_your_review">
+                            <h3>Dejar tu review</h3>
+
+                            <input id="stars" type="hidden" name="stars" value="5">
+
+                            <textarea name="review_description"><%= p_description %></textarea>
+
+                            <div class="bottom_make_your_review">
+                                <div class="star-rating">
+                                    <% for(let i=0; i<5; i++){ %>
+                                        <% if (i<p_rating) { %>
+                                            <i class="fa-solid fa-star review_stars" data-value="<%= i+1 %>"></i>
+                                            <% }else { %>
+                                            <i class="fa-regular fa-star review_stars" data-value="<%= i+1 %>"></i>
+                                        <% } %>
+                                    <% } %>
+                                </div>
+                                <button type="submit" class="full_yellow_button">Publicar</button>
+                            </div>
+                            
+                        </form>
+                    <% } %>  
+                    <div id="all_reviews">
+                        <div id="reviews_header_information">
+                            <span><b>Comentarios</b> ( <%= all_comments.length %> )</span>
+                        </div>
+                        <div id="reviews_container">
+
+                            <% count = 0; all_comments.forEach(comment=>{  %>
+                                <div class="unit_review">
+                                    <h4><%= comment.username %></h4>    
+                                    <div class="comment_star">
+                                        <% for(let i=0; i<5; i++){ %>
+                                            <% if (i<comment.stars) { %>
+                                                <i class="fa-solid fa-star <%= count+'-star' %>" data-value="<%= i+1 %>" @onclick='change_star( <%= i %> , <%= count+'-star' %> )'></i>
+                                                <% }else { %>
+                                                <i class="fa-regular fa-star <%= count+'-star' %>" data-value="<%= i+1 %>" @onclick='change_star( <%= i %> , <%= count+'-star' %> )'></i>
+                                            <% } %>
+                                        <% } %>
+                                    </div>
+                                    <div <% if (comment.comment!==""){ %> class="comment_text" <% }else{ %> class="not_visible" <% } %>>
+                                        <p><%= comment.comment %></p>
+                                    </div>
+                                    
+                                </div>
+                            <% count += 1 })%>
+
+                        </div>
+                    </div>
+
+                        
+                </div>
+            </div>
+        </div>
+        <div id="left_banner">
+
+
+        </div>
+        <div id="my_footer">
+            <div class="footer_unit top">
+                <p>Email de contacto: info@empresa.com</p>
+            </div>
+            <div class="footer_unit">
+                <p>Política de Privacidad y Términos de Servicio disponibles bajo solicitud.</p>
+                <p>Todos los derechos de imagenes, videos y multimedia reservados a su autor. </p>
+            </div>
+        </div>
+    </section>
+    </div>
+    
+</section>
+
+
+
+
+
+
+
+
+
+
+   
 
 <% if (is_owned){ %>
 <script src="/node_modules/sortablejs/Sortable.min.js"></script>
@@ -577,5 +603,5 @@
     
 });
 </script>
-
-<%- include("../partials/end.ejs") -%>
+</body>
+</html>

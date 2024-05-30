@@ -1,64 +1,130 @@
 <%- include("../partials/start.ejs") -%>
-<link rel="stylesheet" href="/stylesheets/new_course.css">
+<link rel="stylesheet" href="/stylesheets/form_style.css">
 </head>
 <body>
 
 <%- include("../partials/header.ejs") -%>
 
-<h3>Crear nuevo curso</h3>
-
-<form id="courseForm" method="POST" action="/courses/edit/<%= course.id %>">
-
-    <input type="text" value="<%= course.title %>" name="title" required>
+<form id="main_page" method="POST" action="/courses/edit/<%= course.id %>">
     
-    <textarea  name="description" required><%= course.description %></textarea>
-    <select id="category" name="category">
-        <% Object.keys(jsonData).forEach(category => { %>
-            <option <% if(category===course.category){ %> selected <% } %>value="<%= category %>"><%= category %></option>
-        <% }) %>
-    </select>
-
-    <div id="class_container">
-        <select id="class_select" name="class_select"></select>
+    <div class="video-background">
+        <video autoplay loop muted>
+            <source src="/images/tech-background.mp4" type="video/mp4">
+        </video>
     </div>
+    <div class="color_tint"></div>
+    <div id="banner">
 
-    <div id="select_price">
-        <div>
-            <span>Escoger precio</span>
-            <input type="radio" id="pay" name="select_price_radio" value="pay" <% if(course.price>0){ %> checked <% } %> >
+    </div>
+    <div id="specific_course_background">
+        <div class="course_container">
+            <div class="image_container_course">
+                <img src="/images/ue-2.jpg" alt="">
+            </div>
+            <div class="course_data">
+                <h1><%= course.title %></h1>
+                <p><%= course.category %></p>
+                <p><%= course.class %></p>
+            </div>
+            
         </div>
-        <div>
-            <span>Gratis</span>
-            <input type="radio" id="free" name="select_price_radio" value="free" <% if(course.price==0){ %> checked <% } %>>
-        </div>
+        
     </div>
 
-    <div id="pay_price_container"></div>
-    
-    <div>
-        <div>
-            <span>Precio base</span>
-            <input type="radio" id="base" class="discount_base" name="select_discount" value="base" checked>
-        </div>
-        <div>
-            <span>Oferta</span>
-            <input type="radio" id="discount" class="discount_base" name="select_discount" value="discount">
-        </div>
-    </div>
 
-    <div id="discount_container" style="display: none">
-        <input type="number" min="1" max="100" value="1" name="discount_input">
-        <p>%</p>
-    </div>
+    <div id="page_content">
+        <div class="unit full" style="margin-top: 7vh">
+            <p>Titulo del curso</p>
+            <input type="text" value="<%= course.title %>" style="width: 48%" name="title" required>
+        </div>
 
-    <input id="add_tag_input" type="text" placeholder="tag" maxlength="20">
-    <button type="button" id="add_tad_button">Añadir tag</button>
-    <div id="tags_container">
-        <input type="hidden" name="input_tags_values" id="input_tags_values">
+        <div class="unit full">
+            <p>Descripción del curso</p>
+            <textarea name="description" placeholder="Describe toda la información necesaria sobre tú curso para que los usuarios sepan los temas que van a ser enseñados, la forma de aprendizaje o porqué adquirir y aprender este curso" required><%= course.description %></textarea>
+        </div>
+
+        <div class="unit">
+            <div class="input_unit">
+                <p>Categoría</p>
+                <select id="category" name="category">
+                    <% Object.keys(jsonData).forEach(category => { %>
+                        <option <% if(category===course.category){ %> selected <% } %>value="<%= category %>"><%= category %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="input_unit">
+                <p>Clase específica</p>
+                <div id="class_container">
+                    <select id="class_select" name="class_select"></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="unit radio_button_container">
+            <div class="content_container">
+                <p>Precio:</p>
+                <div class="radio_buttons">
+                    <div class="unit_radio_button">
+                        <span>Escoger precio</span>
+                        <input type="radio" id="pay" name="select_price_radio" value="pay" <% if(course.price>0){ %> checked <% } %> >
+                    </div>
+                    <div class="unit_radio_button right">
+                        <span>Gratis</span>
+                        <input type="radio" id="free" name="select_price_radio" value="free" <% if(course.price==0){ %> checked <% } %>>
+                    </div>
+                </div>
+            </div>
+            <div class="price_slider">
+                <div id="pay_price_container"></div>
+            </div>
+        </div>
+
+        <div class="unit radio_button_container" style="margin-top: 0%">
+            <div class="content_container">
+                <p>Oferta:</p>
+                <div class="radio_buttons">
+                    <div class="unit_radio_button">
+                        <span>Precio base</span>
+                        <input type="radio" id="base" class="discount_base" name="select_discount" value="base" checked>
+                    </div>
+                    <div class="unit_radio_button right">
+                        <span>Oferta</span>
+                        <input type="radio" id="discount" class="discount_base" name="select_discount" value="discount">
+                    </div>
+                </div>
+            </div>
+            <div id="discount_container" style="display: none">
+                <input type="number" min="1" max="100" value="1" name="discount_input">
+                <p>%</p>
+            </div>
+        </div>
+
+
+        <div class="unit">
+            <div class="input_unit">
+                <p>Categoría</p>
+                <input id="add_tag_input" type="text" placeholder="tag" maxlength="20">
+            </div>
+            <div class="input_unit alone_button">
+                <p> // </p>
+                <button type="button" id="add_tad_button" class="full_yellow_button">Añadir tag</button>
+            </div>
+        </div>
+        <div class="unit full">
+            <div id="tags_container">
+                <input type="hidden" name="input_tags_values" id="input_tags_values">
+            </div>
+        </div>
+        <div class="unit">
+            <div class="input_unit"></div>
+            <div class="input_unit_alone_button">
+                <button type="Submit" class="full_yellow_button">Confirmar cambios</button>
+            </div>
+        </div>
+        <div class="unit"></div>
     </div>
-    
-    <button type="Submit">Confirmar cambios</button>
 </form>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>

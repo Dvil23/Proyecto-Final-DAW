@@ -1,0 +1,155 @@
+#main_page
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+    overflow-x: hidden
+    position: relative
+    min-height: 92vh
+    .video-background 
+        position: fixed
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        overflow: hidden
+        position: absolute
+        z-index: -3
+        video 
+            width: 100%
+            height: 100%
+            object-fit: cover
+    .color_tint
+        position: absolute
+        width: 100%
+        height: 100%
+        background-color: #0a2622d7
+        z-index: -2
+    #page_content
+        width: 100%
+        height: 70vh
+        min-height: 70vh
+        display: flex
+        align-items: center
+        justify-content: center
+        flex-direction: row
+        background-color: #133B35
+        .half_unit
+            height: fit-content
+            
+            width: 40%
+            display: flex
+            align-items: center
+            justify-content: center
+            flex-direction: column
+            
+            .unit_content
+                min-height: 7vh
+                margin-bottom: 3vh
+                width: 100%
+                h1
+                    color: #E9B44C
+                    font-size: x-large
+                    text-align: center
+                p,span
+                    color: #fffffa
+                    font-size: large
+                    margin-left: 1vh
+                span
+                    font-size: small
+                input, textarea
+                    width: 100%
+                    min-height: 5vh
+                    background-color: #fffffa
+                    border-radius: 15px
+                    border: none
+                    padding-left: 3%
+                    padding-right: 3%
+                    outline: none
+                    margin-top: 1vh
+                    margin-bottom: 1vh
+                textarea
+                    min-height: 20vh
+                    resize: none
+            .alone_button
+                display: flex
+                align-items: flex-end
+                justify-content: flex-end
+                button
+                    padding-top: 1vh
+                    padding-bottom: 1vh
+        #der
+            height: 100%
+            min-height: 100%
+            width: 45%
+            background-color: #70A288
+            margin-left: 2vw
+            .unit_content
+                width: 80%
+            .unit_image
+                display: flex
+                align-items: center
+                justify-content: space-around
+                flex-direction: column
+                .image_container
+                    width: 150px
+                    height: 150px
+                    border-radius: 100%
+                    &:after 
+                        content: ""
+                        display: block
+                        padding-bottom: 100%
+                    img
+                        width: 100%
+                        height: 100%
+                        object-fit: contain
+                        border-radius: 100%
+                .insert_file
+                    margin-top: 2vh
+                    margin-bottom: 2vh
+                    p
+                        width: 100%
+                        text-align: center
+                        color: #fffffa
+                        font-size: large
+                        margin-left: 1vh
+                        margin-bottom: 2vh
+                    
+@media only screen and (max-width: 768px)
+    #main_page
+        #page_content
+            margin-top: 5vh
+            margin-bottom: 5vh
+            min-height: 92vh
+            height: fit-content
+            display: flex
+            align-items: center
+            justify-content: flex-start
+            flex-direction: column
+            .half_unit
+                margin-top: 5vh
+                width: 90%
+                height: 100%
+                min-height: fit-content
+                .unit_content
+                    margin-bottom: 1vh
+                    textarea
+                        min-height: 10vh
+            #der
+                height: 100%
+                width: 100%
+                margin-left: 0
+                min-height: 70vh
+                max-height: fit-content
+                
+                .unit_image
+                    margin-top: 2vh
+                    height: fit-content
+                .unit_content
+                    height: 10vh
+                    max-height: fit-content
+                    margin-top: 3vh
+                    button
+                        margin-bottom: 2vh
+
+                

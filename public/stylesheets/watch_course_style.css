@@ -1,0 +1,513 @@
+#main {
+  overflow: hidden;
+  height: 100%;
+  max-height: 100%;
+}
+
+#main_page {
+  width: 100%;
+  overflow-x: hidden;
+  min-height: 92vh;
+  height: -moz-fit-content;
+  height: fit-content;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+#main_page #scroll_lock {
+  width: 100%;
+  height: 92vh;
+  max-height: 92vh;
+  display: flex;
+  overflow: hidden;
+}
+#main_page #scroll_lock #my_footer {
+  position: fixed;
+  bottom: -20vh;
+}
+#main_page #scroll_lock #left_banner, #main_page #scroll_lock #main_content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+#main_page #scroll_lock #left_banner::-webkit-scrollbar, #main_page #scroll_lock .right::-webkit-scrollbar {
+  display: none;
+}
+#main_page #scroll_lock #left_banner {
+  width: 20%;
+  height: 92vh;
+  min-height: 92vh;
+  background-color: #70A288;
+  overflow-y: scroll;
+  position: fixed;
+  right: 0;
+  top: 8vh;
+}
+#main_page #scroll_lock #main_content {
+  width: 80%;
+  height: 92vh;
+  min-height: 92vh;
+  position: fixed;
+  overflow-y: scroll;
+  left: 0;
+  top: 8vh;
+}
+#main_page #scroll_lock #main_content #price_container {
+  position: absolute;
+  top: 30vh;
+  right: 2vw;
+  background-color: #244F45;
+  width: 30vw;
+  max-width: 32vw;
+  min-width: 32vw;
+  border-radius: 15px;
+  height: 30%;
+  max-height: 30vh;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#main_page #scroll_lock #main_content #price_container #price_content {
+  width: 90%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#main_page #scroll_lock #main_content #price_container #price_content .price_unit {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+}
+#main_page #scroll_lock #main_content #price_container #price_content .price_unit * {
+  color: #E9B44C;
+}
+#main_page #scroll_lock #main_content #price_container #price_content #purchase span {
+  font-weight: 100;
+}
+#main_page #scroll_lock #main_content #price_container #price_content #purchase .border_yellow_button {
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding: 1vh;
+  padding-left: 2vh;
+  padding-right: 2vh;
+  border-radius: 15px;
+  font-size: x-large;
+  margin-top: 1vh;
+  border: 3px solid #E9B44C;
+  font-weight: bold;
+  margin-bottom: 1vh;
+  background-color: #244F45;
+  cursor: pointer;
+}
+#main_page #scroll_lock #main_content #price_container #price_content #purchase a {
+  text-decoration: none;
+}
+#main_page #scroll_lock #main_content #price_container #price_content #price {
+  margin-top: 5%;
+  position: relative;
+}
+#main_page #scroll_lock #main_content #price_container #price_content #price h4 {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  font-size: 300;
+}
+#main_page #scroll_lock #main_content #price_container #price_content #price h2 {
+  font-size: xx-large;
+  font-weight: 700;
+}
+#main_page #scroll_lock #main_content #price_container #price_content #price h3 {
+  font-weight: 500;
+}
+#main_page #scroll_lock #main_content #image_header {
+  width: 100%;
+  height: 40vh;
+  max-height: 40vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+#main_page #scroll_lock #main_content #image_header #image_container {
+  z-index: -1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+#main_page #scroll_lock #main_content #image_header #image_container img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  filter: brightness(0.5);
+}
+#main_page #scroll_lock #main_content #image_header #title_container {
+  width: 80%;
+  margin-top: 6%;
+}
+#main_page #scroll_lock #main_content #image_header #title_container h1, #main_page #scroll_lock #main_content #image_header #title_container h3 {
+  color: #fffffa;
+  font-size: 40px;
+  font-weight: bolder;
+}
+#main_page #scroll_lock #main_content #image_header #title_container h3 {
+  font-size: x-large;
+  margin-top: 2%;
+  margin-bottom: 0%;
+}
+#main_page #scroll_lock #main_content #image_header #created_by {
+  position: absolute;
+  bottom: 10%;
+  left: 10%;
+}
+#main_page #scroll_lock #main_content #image_header #created_by span {
+  color: white;
+  opacity: 70%;
+  font-weight: 200;
+}
+#main_page #scroll_lock #main_content #information_container #score {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  width: 54%;
+  min-height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#main_page #scroll_lock #main_content #information_container #score i {
+  font-size: 45px;
+  text-align: center;
+  color: #E9B44C;
+}
+#main_page #scroll_lock #main_content #information_container #score .score_info {
+  margin-top: 1vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#main_page #scroll_lock #main_content #information_container #information {
+  width: 100%;
+  height: -moz-fit-content;
+  height: fit-content;
+  min-height: 20vh;
+  background-color: #133B35;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 5vh;
+}
+#main_page #scroll_lock #main_content #information_container #information .start {
+  padding-top: 5vh;
+}
+#main_page #scroll_lock #main_content #information_container #information .info_unit {
+  width: 80%;
+  margin-top: 2vh;
+}
+#main_page #scroll_lock #main_content #information_container #information .info_unit p, #main_page #scroll_lock #main_content #information_container #information .info_unit span {
+  font-weight: light;
+  width: 100%;
+  color: #fffffa;
+}
+#main_page #scroll_lock #main_content #information_container #information .tags span {
+  opacity: 40%;
+}
+#main_page #scroll_lock #main_content #edit_sections_container {
+  width: 100%;
+  height: -moz-fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+#main_page #scroll_lock #main_content #edit_sections_container #edit_explanation {
+  text-align: center;
+  width: 100%;
+}
+#main_page #scroll_lock #main_content #edit_sections_container #edit_explanation h1 {
+  margin-top: 3vh;
+  font-size: xx-large;
+  font-weight: 600;
+}
+#main_page #scroll_lock #main_content #edit_sections_container #edit_explanation span {
+  width: 100%;
+  min-width: 80vw;
+  border-bottom: 1px solid black;
+  text-align: center;
+  padding-bottom: 1vh;
+  opacity: 80%;
+}
+#main_page #scroll_lock #main_content #edit_sections_container #edit_explanation p {
+  margin-top: 2vh;
+  font-size: small;
+}
+#main_page #scroll_lock #main_content #edit_sections_container #edit_botones {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  height: 7vh;
+}
+#main_page #scroll_lock #main_content #edit_sections_container #edit_botones .botones_unidad {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#main_page #scroll_lock #main_content #edit_sections_container #edit_botones .botones_unidad button {
+  padding: 3%;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+#main_page #scroll_lock #main_content #edit_sections_container #edit_botones .right {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+}
+#main_page #scroll_lock #main_content #edit_sections_container .container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 80%;
+  height: -moz-fit-content;
+  height: fit-content;
+  min-height: 40vh;
+}
+#main_page #scroll_lock #main_content #edit_sections_container .container .title_container {
+  width: 20vw;
+  background-color: #133B35;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  border-radius: 15px 15px 0px 0px;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  color: #FFFFFA;
+}
+#main_page #scroll_lock #main_content #edit_sections_container .container .list {
+  background-color: #70A288;
+  width: 20vw;
+  min-height: 100px;
+  padding: 10px;
+  min-height: 20vh;
+  border-bottom: 15px;
+  border-radius: 0px 0px 15px 15px;
+  box-shadow: 0 8px 10px -5px rgb(0, 19, 12);
+}
+#main_page #scroll_lock #main_content #edit_sections_container .container .list .item {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  cursor: grab;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 15px;
+}
+#main_page #scroll_lock #main_content #edit_sections_container .container .list .item p {
+  margin-left: 5%;
+}
+#main_page #scroll_lock #main_content #edit_sections_container .container .list .item .icons {
+  font-size: medium;
+  display: flex;
+  cursor: pointer;
+}
+#main_page #scroll_lock #main_content #edit_sections_container .container .list .item .icons i {
+  margin-right: 5px;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments {
+  min-height: 50vh;
+  margin-top: 3vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #make_your_review {
+  width: 80%;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #make_your_review h3 {
+  font-size: xx-large;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #make_your_review textarea {
+  width: 80%;
+  min-height: 20vh;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  border-radius: 15px;
+  padding-top: 1vh;
+  padding-left: 1vw;
+  padding-right: 1vw;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #make_your_review .bottom_make_your_review {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  min-height: 5vh;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #make_your_review .bottom_make_your_review .star-rating i {
+  font-size: xx-large;
+  color: #E9B44C;
+  cursor: pointer;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews {
+  width: 80%;
+  height: -moz-fit-content;
+  height: fit-content;
+  min-height: 10vh;
+  margin-top: 2vh;
+  padding-bottom: 5vh;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews span {
+  font-size: medium;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews span b {
+  font-size: x-large;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews #reviews_container {
+  width: 100%;
+  min-height: 5vh;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews #reviews_container .unit_review {
+  height: -moz-fit-content;
+  height: fit-content;
+  min-height: 5vh;
+  width: 100%;
+  margin-top: 2vh;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews #reviews_container .unit_review h4 {
+  font-size: x-large;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews #reviews_container .unit_review .comment_star {
+  font-size: x-large;
+  color: #E9B44C;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews #reviews_container .unit_review .comment_text {
+  width: 100%;
+  min-height: 4vh;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: 2px solid #133B35;
+  margin-top: 1vh;
+  border-radius: 15px;
+}
+
+@media only screen and (max-width: 768px) {
+  #main_page #scroll_lock #left_banner {
+    display: none;
+  }
+  #main_page #scroll_lock #main_content {
+    width: 100%;
+    max-width: 100%;
+  }
+  #main_page #scroll_lock #main_content #price_container {
+    width: 45vw;
+    max-width: 45vw;
+    right: 0;
+  }
+  #main_page #scroll_lock #main_content #price_container #price_content #price h2 {
+    font-size: large;
+  }
+  #main_page #scroll_lock #main_content #price_container #price_content #purchase span {
+    font-size: xx-small;
+  }
+  #main_page #scroll_lock #main_content #price_container #price_content #purchase .border_yellow_button {
+    font-size: medium;
+  }
+  #main_page #scroll_lock #main_content #image_header #title_container h1 {
+    font-size: x-large;
+  }
+  #main_page #scroll_lock #main_content #image_header #title_container h3 {
+    font-size: large;
+  }
+  #main_page #scroll_lock #main_content #information_container #score i {
+    font-size: larger;
+  }
+  #main_page #scroll_lock #main_content #information_container #score .score_info span {
+    font-size: x-small;
+  }
+  #main_page #scroll_lock #main_content #information_container #information .tags {
+    font-size: xx-small;
+  }
+  #main_page #scroll_lock #main_content #information_container #edit_sections_container #edit_explanation {
+    width: 80%;
+  }
+  #main_page #scroll_lock #main_content #information_container #edit_sections_container #edit_explanation h1 {
+    font-size: large;
+  }
+  #main_page #scroll_lock #main_content #information_container #edit_sections_container #edit_explanation span {
+    font-size: xx-small;
+  }
+  #main_page #scroll_lock #main_content #information_container #edit_sections_container #edit_botones {
+    height: -moz-fit-content;
+    height: fit-content;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+  }
+  #main_page #scroll_lock #main_content #information_container #edit_sections_container #edit_botones .botones_unidad {
+    width: 100%;
+    margin-top: 3vh;
+  }
+  #main_page #scroll_lock #main_content #information_container #edit_sections_container .container {
+    width: 90%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+  #main_page #scroll_lock #main_content #information_container #edit_sections_container .container .list_container {
+    width: 95%;
+    margin-bottom: 2vh;
+    max-width: 95%;
+  }
+  #main_page #scroll_lock #main_content #information_container #edit_sections_container .container .list_container .title_container {
+    width: 100%;
+  }
+  #main_page #scroll_lock #main_content #information_container #edit_sections_container .container .list_container .list {
+    width: 100%;
+  }
+  #main_page #scroll_lock #main_content #information_container #reviews_and_comments #make_your_review {
+    text-align: center;
+  }
+  #main_page #scroll_lock #main_content #information_container #reviews_and_comments #make_your_review textarea {
+    width: 100%;
+  }
+  #main_page #scroll_lock #main_content #information_container #reviews_and_comments #make_your_review .bottom_make_your_review {
+    width: 100%;
+  }
+  #main_page #scroll_lock #main_content #information_container #reviews_and_comments #make_your_review .bottom_make_your_review .star-rating {
+    display: block;
+  }
+  #main_page #scroll_lock #main_content #information_container #reviews_and_comments #make_your_review .bottom_make_your_review .star-rating i {
+    font-size: large;
+  }
+  #main_page #scroll_lock #main_content #information_container #reviews_and_comments #all_reviews #reviews_container .unit_review h4 {
+    font-size: large;
+  }
+  #main_page #scroll_lock #main_content #information_container #reviews_and_comments #all_reviews #reviews_container .unit_review .comment_star i {
+    font-size: large;
+  }
+}/*# sourceMappingURL=watch_course_style.css.map */
