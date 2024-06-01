@@ -1,83 +1,42 @@
-<style>
-    .container,.container_regular_user{
-        display: grid;
-        grid-template-columns: repeat(4,1fr);
-        gap: 20px;
-        width: 200px;
-        min-height: 150px
-        
-        
-    }
-    .title_container{
-        background-color: lightblue;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        text-align: center;
-    }
 
-    .list {
-        border: 1px solid #ccc;
-        width: 200px;
-        min-height: 100px;
-        padding: 10px;
-        min-height: 90%;
-        
-        
-    }
-    .item {
-        border: 1px solid #000;
-        padding: 10px;
-        margin-bottom: 10px;
-        background-color: #f9f9f9;
-        cursor: grab;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .item p{
-        margin-left: 5%
-    }
-    .item .icons{
-        font-size: small;
-        display: flex
-    }
-    .item .icons i{
-        margin-right: 5px;
-    }
-    .segmento{
-        border: 1px solid #ccc;
-        width: 200px;
-        min-height: 100px;
-        padding: 10px;
-    }
-    .componente{
-        border: 1px solid #000;
-        padding: 10px;
-        margin-bottom: 10px;
-        background-color: #f9f9f9;
-    }
-  </style>
-
+<div class="title_left_banner">
+    <h1>Contenido del curso</h1>
+</div>
 <div class="container_regular_user">
+    
     <% for (let i=0;i<result_total_segments;i++){ %>
         <% if(i!==0){%>
-            <div class="segmento">
-                
+
+            
+
+                <% first_time= true %>
+
                 <% results_sections.forEach(component =>{ %>
                     <% if(component.segment===i && component.video_name!== null && component.video_name!== ""){ %>
+                        
+                        <% if (first_time){ %> 
+                            <div class="segmento"> 
+                                <div class="title_container_regular_user">
+                                    <p>Tema <%= i %></p>
+                                </div>
+                        <% } %>
 
-                        <div class="componente">
-                            <% if(is_bought){ %>
-                            <a href="/courses/watch/<%= course_id %>/<%= component.id %>"><%= component.segment %>-<%= component.component %> <%= component.title %></a>
-                            <% }else{ %>
-                            <p><%= component.segment %>-<%= component.component %> <%= component.title %></p>
-                            <% } %>
-                        </div>
+                            <div class="componente">
+                                <% if(is_bought || is_owned){ %>
+                                <a href="/courses/watch/<%= course_id %>/<%= component.id %>"><%= component.segment %>-<%= component.component %> <%= component.title %></a>
+                                <% }else{ %>
+                                <p><%= component.segment %>-<%= component.component %> <%= component.title %></p>
+                                <% } %>
+                            </div>
+
+                        <% first_time=false %>
 
                     <% } %>
                 <% }) %>
-            </div>
+
+                <% if (!first_time){ %> </div> <% } %>        
+
         <% } %>
     <% } %>
+
 </div>

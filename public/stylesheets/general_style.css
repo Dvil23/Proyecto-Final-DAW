@@ -13,6 +13,46 @@
   position: relative;
   overflow-x: hidden;
 }
+#main #responsive_menu {
+  z-index: 999;
+  position: absolute;
+  background-color: #0A2622;
+  width: 60vw;
+  height: 100%;
+  right: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2vh;
+  padding-bottom: 4vh;
+}
+#main #responsive_menu #menu_content {
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 100%;
+  margin-top: 5vh;
+  display: flex;
+  flex-direction: column;
+}
+#main #responsive_menu #menu_content div, #main #responsive_menu #menu_content form {
+  margin-top: 5vh;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+#main #responsive_menu #menu_content div button, #main #responsive_menu #menu_content form button {
+  background-color: #1e1e1f;
+  cursor: pointer;
+  border: none;
+  color: red;
+}
+#main #responsive_menu #menu_content i {
+  margin-right: 2vw;
+}
+#main #responsive_menu #menu_content a, #main #responsive_menu #menu_content i {
+  text-decoration: none;
+  color: white;
+}
 #main #header_menu {
   z-index: 999;
   position: absolute;
@@ -83,7 +123,6 @@
 #main #myheader #links {
   width: 50%;
   height: 100%;
-  display: flex;
   align-items: center;
   justify-content: right;
 }
@@ -142,6 +181,38 @@
   padding-bottom: 2vh;
 }
 
+.mobile-view {
+  display: none;
+}
+.mobile-view i {
+  color: #fffffa;
+  margin-right: 5vw;
+  font-size: xx-large;
+}
+
+.desktop-view {
+  display: flex;
+}
+
+#open_apartados_responsive {
+  position: absolute;
+  top: 10vh;
+  right: 3vw;
+  z-index: 990;
+  background-color: #79d4a9;
+  width: 40px;
+  height: 40px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 100%;
+}
+#open_apartados_responsive i {
+  color: #ffd900;
+  font-size: large;
+}
+
 .full_yellow_button {
   color: white;
   font-weight: bold;
@@ -187,6 +258,26 @@ select {
 
 textarea {
   resize: none;
+}
+
+.border_yellow_button {
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding: 1vh;
+  padding-left: 2vh;
+  padding-right: 2vh;
+  border-radius: 15px;
+  font-size: x-large;
+  margin-top: 1vh;
+  border: 3px solid #E9B44C;
+  text-decoration: none;
+  color: #E9B44C;
+  font-weight: bold;
+  margin-bottom: 1vh;
+  background-color: #244F45;
+  cursor: pointer;
 }
 
 .roboto-thin {
@@ -264,5 +355,14 @@ textarea {
 @media only screen and (max-width: 768px) {
   #my_footer .footer_unit p {
     font-size: x-small;
+  }
+  .mobile-view {
+    display: flex;
+  }
+  .desktop-view {
+    display: none;
+  }
+  #open_apartados_responsive {
+    display: flex;
   }
 }/*# sourceMappingURL=general_style.css.map */

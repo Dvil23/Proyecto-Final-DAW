@@ -1,0 +1,209 @@
+#main_page
+    width: 100%
+    height: 92vh
+    max-height: 92vh
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: row
+    #left_banner, #main_content
+        -ms-overflow-style: none
+        scrollbar-width: none
+    #left_banner::-webkit-scrollbar, .right::-webkit-scrollbar 
+        display: none
+    #main_content
+        width: 80%
+        height: 92vh
+        overflow-y: auto
+        position: relative
+        #specific_course_background
+            background-color: red
+            width: 100%
+            max-height: 110vh
+            min-height: 96vh
+            position: absolute
+            z-index: -1
+            overflow: hidden
+            .course_container
+                width: 100%
+                height: 46vh
+                max-height: 46vh
+                position: relative
+                .image_container_course
+                    width: 100%
+                    height: 100%
+                    object-fit: cover
+                    position: absolute
+                    img
+                        width: 100%
+                        height: 100%
+                        object-fit: cover
+                        filter: brightness(0.5)
+                .course_data
+                    position: absolute
+                    margin-left: 12%
+                    margin-top: 5%
+                    color: #FFFFFA
+                    h1
+                        font-size: 40px
+                        margin-top: 5%
+                    p
+                        font-size: xx-large
+                        margin-top: 1% 
+            #background-fill
+                width: 100%
+                min-height: 500vh
+                max-height: 500vh
+                height: 500vh
+                background-color: #244F45
+        #section_info
+            width: 100%
+            min-width: 100%
+            height: fit-content
+            min-height: 68vh
+            margin-top: 24vh
+            margin-left: 10vw
+            
+            #section_video
+                width: 80vh
+                height: 46vh
+                background-color: black
+                video
+                    width: 100%
+                    height: 100%
+            #section_no_video
+                width: 60vw
+                height: 46vh
+                background-color: black
+                display: flex
+                align-items: center
+                justify-content: center
+                span
+                    text-align: center
+                    color: #FFFFFA
+                
+            .section_info_unit
+                margin-top: 1vh
+                width: 60vw
+                display: flex
+                align-items: center
+                justify-content: space-between
+                p
+                    color: #fffffa
+                    opacity: 80%
+                    
+                    word-break: break-all
+                span
+                    color: #fffffa
+                .border_yellow_button
+                    padding: 1vh
+                    padding-top: 1vh
+                    padding-bottom: 1vh
+                    font-size: medium
+                
+
+    #left_banner
+        background-color: green
+        width: 20%
+        height: 92vh
+        overflow-y: auto
+        background-color: #70A288
+        display: flex
+        align-items: center
+        flex-direction: column
+        .title_left_banner
+            margin-top: 5vh
+            with: 90%
+            padding-bottom: 2vh
+            border-bottom: 2px solid #fffffa
+            h1
+                color: #fffffa
+                
+        .container_regular_user
+            margin-top: 5vh
+            width: 90%
+            height: fit-content
+            z-index: 40
+            .segmento
+                width: 100%
+                margin-top: 2vh
+                background-color: #244F45
+
+                padding-bottom: 3vh
+                border-radius: 15px
+                display: flex
+                align-items: center
+                justify-content: center
+                flex-direction: column
+                .title_container_regular_user
+                    width: 100%
+                    background-color: #133B35
+                    padding-top: 2vh
+                    padding-bottom: 2vh
+                    margin-bottom: 1vh
+                    border-radius: 15px 15px 0px 0px
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    text-align: center
+                    p
+                        font-size: larger
+                        font-weight: 500
+                        color: #E9B44C
+                .componente
+                    width: 90%
+                    height: fit-content
+                    min-height: 5vh
+                    border: 2px solid #E9B44C
+                    margin-top: 1vh
+                    border-radius: 15px
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    cursor: pointer
+                    p, a
+                        padding-top: 0.5vh
+                        padding-bottom: 0.5vh
+                        text-decoration: none
+                        width: 90%
+                        font-weight: 500
+                        color: #E9B44C
+                        text-align: center
+
+@media only screen and (max-width: 768px)
+    #main_page
+        #left_banner
+            display: none
+        #main_content
+            width: 100%
+            #specific_course_background
+                .course_container
+                    .course_data
+                        margin-left: 0
+                        h1
+                            font-size: x-large
+                            text-align: center
+                        p
+                            font-size: larger
+                            text-align: center
+                #background-fill
+                    padding-bottom: 100vh
+            #section_info
+                width: 100%
+                margin-left: 0
+                #section_video
+                    width: 100%
+                    height: fit-content
+                    margin-top: 32vh
+                #section_no_video
+                    width: 100%
+                    height: 30vh
+                .section_info_unit
+                    margin-left: 5%
+                    width: 90%
+                    font-size: small
+                    p
+                        width: 100%
+                        word-break: break-all
+                    a
+                        font-size: smaller!important

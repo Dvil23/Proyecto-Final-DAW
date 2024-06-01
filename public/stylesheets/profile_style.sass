@@ -1,0 +1,202 @@
+#main_page
+    #header_full
+        width: 100%
+        height: 30vh
+        max-height: 40vh
+        min-height: 40vh
+        position: relative
+        display: flex
+        align-items: center
+        justify-content: center
+        .video-background 
+            position: absolute
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            overflow: hidden
+            position: absolute
+            z-index: -3
+            video 
+                width: 100%
+                height: 100%
+                object-fit: cover
+        .background-tint
+            z-index: -2
+            background-color: #133b35a6
+            position: absolute
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            overflow: hidden
+            position: absolute
+        #banner
+            width: 100%
+            height: 70%
+            background-color: #133B35
+            display: flex
+            align-items: center
+            justify-content: space-around
+            flex-direction: row
+            #image_container
+                width: 17vw
+                height: 17vw
+                object-fit: cover
+                border-radius: 100%
+                display: flex
+                align-items: center
+                justify-content: center
+                max-width: 200px
+                max-height: 200px
+                img
+                    border-radius: 100%
+                    object-fit: cover
+                    width: 100%
+                    height: 100%
+            #biography_username
+                display: flex
+                justify-content: center
+                flex-direction: column
+                width: 60vw
+                height: 100%
+                h1
+                    font-size: x-large
+                    color: #E9B44C
+                    margin-bottom: 2vh
+                p
+                    word-break: break-all
+                    font-size: medium
+                    color: #FFFFFA
+    #view_course
+        display: flex
+        align-items: center
+        justify-content: center
+        flex-direction: column
+        background-color: #70A288
+        padding-bottom: 2vh
+        
+        #title
+           background-color: #133B35
+           width: 100%
+           min-height: 5vh
+           height: 5vh 
+           display: flex
+           align-items: center
+           justify-content: center
+           text-align: center
+           color: #E9B44C
+        .no_course
+            min-height: 19vh
+            display: flex
+            align-items: center
+            justify-content: center
+            text-align: center
+            color: #FFFFFA
+        #all_courses_container
+            padding-top: 2vh
+            width: 95%
+            height: fit-content
+            max-height: fit-content
+            -ms-overflow-style: none
+            scrollbar-width: none
+            display: grid
+            grid-template-columns: repeat(3,1fr)
+            gap: 2vh
+            .course_unit
+                height: fit-content
+                width: 100%
+                min-width: 100%
+                margin-bottom: 1vh
+                margin-top: 1vh
+                max-width: 100%
+                background-color: #FFFFFA
+                border-radius: 15px
+                display: flex
+                align-items: center
+                justify-content: center
+                flex-direction: column
+                position: relative
+                .course_image
+                    border-radius: 15px 15px 0px 0px
+                    width: 100%
+                    min-height: 20vh
+                    height: 20vh
+                    margin-bottom: 2vh
+                    img
+                        border-radius: 15px 15px 0px 0px
+                        width: 100%
+                        height: 100%
+                        object-fit: cover
+                h1
+                    width: 90%
+                    margin-left: 5%
+                    font-weight: 700
+                h3
+                    font-weight: 500
+                    width: 90%
+                    margin-left: 5%
+                h5
+                    width: 90%
+                    margin-left: 5%
+                    font-weight: 500
+                    margin-bottom: 2vh
+                .empty
+                    width: 100%
+                    height: 8vh
+                    max-height: 8vh
+                    min-height: 8vh
+                .price_container
+                    width: 90%
+                    margin-left: 5%
+                    display: flex
+                    align-items: center
+                    h4
+                        margin-top: 0.2vh
+                        font-weight: 300
+                        margin-right: 0.5vw
+                    h2
+                        font-weight: 700
+                    .off
+                        margin-left: 0.5vw
+                        font-weight: 500
+                        color: #133B35
+                .watch_button_username
+                    position: absolute
+                    display: flex
+                    align-items: center
+                    justify-content: space-between
+                    width: 90%
+                    bottom: 2vh
+                    left: 5%
+
+                    .username_container
+                        font-size: smaller
+                        font-weight: 500
+                        p
+                            padding: 0.5vh
+                            border-radius: 15px
+                            color: #fffffa
+                            text-align: center
+                            margin-top: 0.5vh
+                            background-color: #133B35
+                    a
+                        padding-left: 3vh
+                        padding-right: 3vh
+                        padding-top: 1vh
+                        padding-bottom: 1vh
+                        background-color: #E9B44C
+                        text-decoration: none
+                        border-radius: 15px
+                        cursor: pointer
+                        color: #FFFFFA
+@media only screen and (max-width: 768px)
+    #main_page
+        #view_course
+            #all_courses_container
+                grid-template-columns: repeat(1,1fr)
+                .course_unit
+                    width: 80%
+                    min-width: 80%
+                    max-width: 80%
+                    margin-left: 10%

@@ -16,14 +16,12 @@
 }
 #main_page #scroll_lock {
   width: 100%;
+  max-width: 100%;
+  min-width: 100%;
   height: 92vh;
   max-height: 92vh;
   display: flex;
   overflow: hidden;
-}
-#main_page #scroll_lock #my_footer {
-  position: fixed;
-  bottom: -20vh;
 }
 #main_page #scroll_lock #left_banner, #main_page #scroll_lock #main_content {
   -ms-overflow-style: none;
@@ -41,6 +39,75 @@
   position: fixed;
   right: 0;
   top: 8vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+#main_page #scroll_lock #left_banner .title_left_banner {
+  margin-top: 5vh;
+  with: 90%;
+  padding-bottom: 2vh;
+  border-bottom: 2px solid #fffffa;
+}
+#main_page #scroll_lock #left_banner .title_left_banner h1 {
+  color: #fffffa;
+}
+#main_page #scroll_lock #left_banner .container_regular_user {
+  margin-top: 5vh;
+  width: 90%;
+  height: -moz-fit-content;
+  height: fit-content;
+  z-index: 40;
+}
+#main_page #scroll_lock #left_banner .container_regular_user .segmento {
+  width: 100%;
+  margin-top: 2vh;
+  background-color: #244F45;
+  padding-bottom: 3vh;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#main_page #scroll_lock #left_banner .container_regular_user .segmento .title_container_regular_user {
+  width: 100%;
+  background-color: #133B35;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+  margin-bottom: 1vh;
+  border-radius: 15px 15px 0px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+#main_page #scroll_lock #left_banner .container_regular_user .segmento .title_container_regular_user p {
+  font-size: larger;
+  font-weight: 500;
+  color: #E9B44C;
+}
+#main_page #scroll_lock #left_banner .container_regular_user .segmento .componente {
+  width: 90%;
+  height: -moz-fit-content;
+  height: fit-content;
+  min-height: 5vh;
+  border: 2px solid #E9B44C;
+  margin-top: 1vh;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+#main_page #scroll_lock #left_banner .container_regular_user .segmento .componente p, #main_page #scroll_lock #left_banner .container_regular_user .segmento .componente a {
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  text-decoration: none;
+  width: 90%;
+  font-weight: 500;
+  color: #E9B44C;
+  text-align: center;
 }
 #main_page #scroll_lock #main_content {
   width: 80%;
@@ -87,23 +154,6 @@
 }
 #main_page #scroll_lock #main_content #price_container #price_content #purchase span {
   font-weight: 100;
-}
-#main_page #scroll_lock #main_content #price_container #price_content #purchase .border_yellow_button {
-  width: -moz-fit-content;
-  width: fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
-  padding: 1vh;
-  padding-left: 2vh;
-  padding-right: 2vh;
-  border-radius: 15px;
-  font-size: x-large;
-  margin-top: 1vh;
-  border: 3px solid #E9B44C;
-  font-weight: bold;
-  margin-bottom: 1vh;
-  background-color: #244F45;
-  cursor: pointer;
 }
 #main_page #scroll_lock #main_content #price_container #price_content #purchase a {
   text-decoration: none;
@@ -168,7 +218,8 @@
   bottom: 10%;
   left: 10%;
 }
-#main_page #scroll_lock #main_content #image_header #created_by span {
+#main_page #scroll_lock #main_content #image_header #created_by a {
+  text-decoration: none;
   color: white;
   opacity: 70%;
   font-weight: 200;
@@ -194,6 +245,9 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+#main_page #scroll_lock #main_content #information_container #score .score_info span {
+  text-align: center;
 }
 #main_page #scroll_lock #main_content #information_container #information {
   width: 100%;
@@ -394,7 +448,24 @@
   width: 100%;
   margin-top: 2vh;
 }
-#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews #reviews_container .unit_review h4 {
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews #reviews_container .unit_review .username_and_pfp {
+  display: flex;
+  align-items: center;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews #reviews_container .unit_review .username_and_pfp .image_container_pfp {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews #reviews_container .unit_review .username_and_pfp .image_container_pfp img {
+  border-radius: 100%;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+#main_page #scroll_lock #main_content #reviews_and_comments #all_reviews #reviews_container .unit_review .username_and_pfp h4 {
+  margin-left: 2vw;
   font-size: x-large;
 }
 #main_page #scroll_lock #main_content #reviews_and_comments #all_reviews #reviews_container .unit_review .comment_star {
@@ -415,9 +486,19 @@
   border-radius: 15px;
 }
 
+#paymentForm p {
+  margin-top: 2vh;
+}
+#paymentForm .swal2-input {
+  margin-top: 0;
+}
+
 @media only screen and (max-width: 768px) {
   #main_page #scroll_lock #left_banner {
     display: none;
+  }
+  #main_page #scroll_lock #left_banner .title_left_banner {
+    margin-top: 10vh;
   }
   #main_page #scroll_lock #main_content {
     width: 100%;

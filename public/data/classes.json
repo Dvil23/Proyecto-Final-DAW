@@ -5,6 +5,5 @@
     "Analisis de datos": ["SQL", "MYSQL"],
     "Desarrollo de videojuegos": ["Unreal Engine", "Unity", "Level design", "Character design"],
     "Graphic design": ["Photoshop", "Gimp", "Character design"],
-    "3D Design": ["Blockbench", "Blender", "Rigging", "Voxels"],
-    "Otro":[]
+    "3D Design": ["Blockbench", "Blender", "Rigging", "Voxels"]
 }

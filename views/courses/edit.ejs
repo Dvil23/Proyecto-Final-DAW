@@ -5,6 +5,8 @@
 
 <%- include("../partials/header.ejs") -%>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <form id="main_page" method="POST" action="/courses/edit/<%= course.id %>">
     
     <div class="video-background">
@@ -13,16 +15,16 @@
         </video>
     </div>
     <div class="color_tint"></div>
-    <div id="banner">
+    <a id="banner" href="/courses/watch/<%= course.id %>">
 
-    </div>
+    </a>
     <div id="specific_course_background">
         <div class="course_container">
             <div class="image_container_course">
-                <img src="/images/ue-2.jpg" alt="">
+                <img src="http://192.168.1.33/images/backgrounds/<%= course.background_image %>" alt="">
             </div>
             <div class="course_data">
-                <h1><%= course.title %></h1>
+                <h1 ><%= course.title %></h1>
                 <p><%= course.category %></p>
                 <p><%= course.class %></p>
             </div>
@@ -33,7 +35,12 @@
 
 
     <div id="page_content">
-        <div class="unit full" style="margin-top: 7vh">
+        <div class="unit unit_change_image" id="cambiar_foto_de_perfil">
+            <p >Cambiar foto del curso</p>
+            <i class="fa-regular fa-pen-to-square"></i>
+        </div>
+
+        <div class="unit full" >
             <p>Titulo del curso</p>
             <input type="text" value="<%= course.title %>" style="width: 48%" name="title" required>
         </div>
@@ -43,6 +50,7 @@
             <textarea name="description" placeholder="Describe toda la información necesaria sobre tú curso para que los usuarios sepan los temas que van a ser enseñados, la forma de aprendizaje o porqué adquirir y aprender este curso" required><%= course.description %></textarea>
         </div>
 
+        
         <div class="unit">
             <div class="input_unit">
                 <p>Categoría</p>
@@ -115,6 +123,7 @@
                 <input type="hidden" name="input_tags_values" id="input_tags_values">
             </div>
         </div>
+        
         <div class="unit">
             <div class="input_unit"></div>
             <div class="input_unit_alone_button">
@@ -213,32 +222,27 @@
 
         let category_val = category.value
 
-        if (category_val=="otro"){
-            //Si es otro, quita el select y pone un input de texto
-            class_container.innerHTML=""
-            class_container.innerHTML="<input type='text' name='otro'>"
-        }else{
-            //Si es otra cosa, quita lo anterior para añadir lo nuevo
-            class_container.innerHTML=""
-            class_container.innerHTML="<select id='class_select' name='class_select'></select>"
-            let class_select = document.getElementById("class_select")
+        //Si es otra cosa, quita lo anterior para añadir lo nuevo
+        class_container.innerHTML=""
+        class_container.innerHTML="<select id='class_select' name='class_select'></select>"
+        let class_select = document.getElementById("class_select")
 
-            //Crea una opcion por cada dato del array
-            for (let i=0; i<datos[category_val].length; i++) {
-                
-                var option = document.createElement("option")
-                option.value = datos[category_val][i]
-                option.text = datos[category_val][i]
+        //Crea una opcion por cada dato del array
+        for (let i=0; i<datos[category_val].length; i++) {
+            
+            var option = document.createElement("option")
+            option.value = datos[category_val][i]
+            option.text = datos[category_val][i]
 
-                if (start===true){
-                    option.setAttribute("selected","selected")
-                }
-
-                class_select.appendChild(option)
+            if (start===true){
+                option.setAttribute("selected","selected")
             }
+
+            class_select.appendChild(option)
         }
-        
     }
+        
+    
 
     change_select(true)
 
@@ -330,5 +334,27 @@
     </script>    
     
 <% count +=1 }) %>
+
+<script>
+    document.getElementById('cambiar_foto_de_perfil').addEventListener('click',()=>{
+        show_image()
+    })
+    function show_image(){
+        Swal.fire({
+            html: `
+            <form class="insert_image_file" action="/courses/change_back_image/<%= course.id %>" method="post" enctype="multipart/form-data">
+                <p>Nueva foto del curso</p>
+                <input type="file" name="file">
+                <button class="full_yellow_button" type="submit">Cambiar foto del curso</button>
+            </form>
+            `,
+            showConfirmButton: false,
+            //Esto es animate.css
+            showClass: { popup: `animate__animated animate__faster animate__headShake`},
+            hideClass: { popup: `animate__animated animate__fadeOutDown animate__faster ` }
+        })
+    }
+</script>
+
 
 <%- include("../partials/end.ejs") -%>

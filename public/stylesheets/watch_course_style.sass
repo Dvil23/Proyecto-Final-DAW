@@ -12,13 +12,13 @@
     overflow: hidden
     #scroll_lock
         width: 100%
+        max-width: 100%
+        min-width: 100%
         height: 92vh
         max-height: 92vh
         display: flex
         overflow: hidden
-        #my_footer
-            position: fixed
-            bottom: -20vh
+            
         #left_banner, #main_content
             -ms-overflow-style: none
             scrollbar-width: none
@@ -33,8 +33,67 @@
             position: fixed
             right: 0
             top: 8vh
-        
-                        
+            display: flex
+            align-items: center
+            flex-direction: column
+            .title_left_banner
+                margin-top: 5vh
+                with: 90%
+                padding-bottom: 2vh
+                border-bottom: 2px solid #fffffa
+                h1
+                    color: #fffffa
+                    
+            .container_regular_user
+                margin-top: 5vh
+                width: 90%
+                height: fit-content
+                z-index: 40
+                .segmento
+                    width: 100%
+                    margin-top: 2vh
+                    background-color: #244F45
+
+                    padding-bottom: 3vh
+                    border-radius: 15px
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    flex-direction: column
+                    .title_container_regular_user
+                        width: 100%
+                        background-color: #133B35
+                        padding-top: 2vh
+                        padding-bottom: 2vh
+                        margin-bottom: 1vh
+                        border-radius: 15px 15px 0px 0px
+                        display: flex
+                        align-items: center
+                        justify-content: center
+                        text-align: center
+                        p
+                            font-size: larger
+                            font-weight: 500
+                            color: #E9B44C
+                    .componente
+                        width: 90%
+                        height: fit-content
+                        min-height: 5vh
+                        border: 2px solid #E9B44C
+                        margin-top: 1vh
+                        border-radius: 15px
+                        display: flex
+                        align-items: center
+                        justify-content: center
+                        cursor: pointer
+                        p, a
+                            padding-top: 0.5vh
+                            padding-bottom: 0.5vh
+                            text-decoration: none
+                            width: 90%
+                            font-weight: 500
+                            color: #E9B44C
+                            text-align: center
 
         #main_content
             width: 80%
@@ -78,20 +137,7 @@
                     #purchase
                         span
                             font-weight: 100
-                        .border_yellow_button
-                            width: fit-content
-                            height: fit-content
-                            padding: 1vh
-                            padding-left: 2vh
-                            padding-right: 2vh
-                            border-radius: 15px
-                            font-size: x-large
-                            margin-top: 1vh
-                            border: 3px solid #E9B44C 
-                            font-weight: bold
-                            margin-bottom: 1vh
-                            background-color: #244F45
-                            cursor: pointer
+                        
                         a
                             text-decoration: none
 
@@ -144,7 +190,8 @@
                     position: absolute
                     bottom: 10%
                     left: 10%
-                    span
+                    a
+                        text-decoration: none
                         color: white
                         opacity: 70%
                         font-weight: 200
@@ -168,6 +215,8 @@
                         align-items: center
                         justify-content: center
                         flex-direction: column
+                        span
+                            text-align: center
                 #information
                     width: 100%
                     height: fit-content
@@ -334,8 +383,21 @@
                             min-height: 5vh
                             width: 100%
                             margin-top: 2vh
-                            h4
-                                font-size: x-large
+                            .username_and_pfp
+                                display: flex
+                                align-items: center
+                                .image_container_pfp
+                                    width: 50px
+                                    height: 50px
+                                    border-radius: 100%
+                                    img
+                                        border-radius: 100%
+                                        width: 100%
+                                        height: 100%
+                                        object-fit: contain
+                                h4
+                                    margin-left: 2vw
+                                    font-size: x-large
                             .comment_star
                                 font-size: x-large
                                 color: #E9B44C
@@ -350,8 +412,12 @@
                                 border: 2px solid #133B35
                                 margin-top: 1vh
                                 border-radius: 15px
-                            
+#paymentForm
 
+    p
+        margin-top: 2vh                      
+    .swal2-input
+        margin-top: 0
 
 
                         
@@ -362,6 +428,8 @@
             
             #left_banner
                 display: none
+                .title_left_banner
+                    margin-top: 10vh
             #main_content
                 width: 100%
                 max-width: 100%

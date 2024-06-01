@@ -1,0 +1,36 @@
+<div id="open_apartados_responsive"><i id="open_apartados_i" class="fa-solid fa-magnifying-glass"></i></div>
+<script>
+    document.getElementById('open_apartados_responsive').addEventListener('click',()=>{
+
+        open_responsive_apartado()
+    })
+
+    function open_responsive_apartado(){
+        let open=document.getElementById('open_apartados_i')
+        
+        if (open.classList.contains('fa-magnifying-glass')){
+            let left_banner=document.getElementById('left_banner')
+            left_banner.style.display="flex"
+            left_banner.style.maxWidth="60vw"
+            left_banner.style.width="60vw"
+            left_banner.style.minWidth="60vw"
+            left_banner.style.position="absolute"
+            left_banner.style.right="0"
+            open.classList.remove('fa-magnifying-glass')
+            open.classList.add('fa-x')
+            open.style.color="red"
+        }else{
+            let left_banner=document.getElementById('left_banner')
+            left_banner.style.display="none"
+            left_banner.style.maxWidth="20%"
+            left_banner.style.width="20%"
+            left_banner.style.minWidth="20%"
+            
+            open.classList.remove('fa-x')
+            open.classList.add('fa-magnifying-glass')
+            
+            open.style.color="#ffd900"
+        }
+    }
+    
+</script>

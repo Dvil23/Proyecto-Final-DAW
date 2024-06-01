@@ -1,11 +1,11 @@
 <section id="main">
-    <% if (typeof user !=='undefined') { %> 
+    <% if (typeof myuser !=='undefined') { %> 
     
     <div id="header_menu">
         <div id="menu_content">
-            <div><i class="fa-solid fa-user"></i><a href="/profile">Editar Perfil</a></div>
-            <div><i class="fa-solid fa-star"></i><a href="/plans">Planes</a></div>
-            <div><i class="fa-solid fa-plus"></i><a href="/create_course">Crear curso</a></div>
+            <div><i class="fa-solid fa-user"></i><a href="/profile/">Ver Perfil</a></div>
+            <div><i class="fa-solid fa-pen-to-square"></i><a href="/profile/account">Editar Perfil</a></div>
+            <div><i class="fa-solid fa-plus"></i><a href="/courses/new">Crear curso</a></div>
             <form method="POST" action="/logout">
                 <i style="color:red" class="fa-solid fa-arrow-right-from-bracket"></i><button type="submit">Cerrar sesión</button>
             </form>
@@ -14,18 +14,36 @@
     </div>
     <div id="arrow-up"></div>
     <% } %>
-    <header id="myheader">
-        <div id="title">
-            <h1>Mi Web</h1>
+    <div id="responsive_menu">
+        <div id="menu_content">
+            <% if (typeof myuser !=='undefined') { %> 
+            <div id="close_responsive_menu"><i class="fa-solid fa-x"></i><a>Cerrar menú</a></div>
+            <div><i class="fa-solid fa-user"></i><a href="/profile/">Ver Perfil</a></div>
+            <div><i class="fa-solid fa-pen-to-square"></i><a href="/profile/account">Editar Perfil</a></div>
+            <div><i class="fa-solid fa-plus"></i><a href="/courses/new">Crear curso</a></div>
+            <form method="POST" action="/logout">
+                <i style="color:red" class="fa-solid fa-arrow-right-from-bracket"></i><button type="submit">Cerrar sesión</button>
+            </form>
+            <% } else { %>
+                <div id="close_responsive_menu"><i class="fa-solid fa-x"></i><a>Cerrar menú</a></div>
+                <div><a href="/login">Login</a></div>
+                <div><a href="/register">Register</a></div>
+            <% } %>
         </div>
-        <div id="links">
+    </div>
+    
+    <header id="myheader" >
+        <div id="title">
+            <h1>TechTeach</h1>
+        </div>
+        <div id="links" class="desktop-view">
             <a href="/">Inicio</a>
-            <a href="/contacto">Contacto</a>
+            <a href="/courses">Buscar cursos</a>
 
-            <% if (typeof user !=='undefined') { %> 
+            <% if (typeof myuser !=='undefined') { %> 
 
             <a href="/profile" id="profile">
-                <img class="profile_picture" src="/images/<%= user.pfp %>.jpg" alt="">
+                <img class="profile_picture" src="http://192.168.1.33/images/pfp/<%= myuser.mypfp %>" alt="">
             </a>
             
             <% } else { %>
@@ -36,9 +54,34 @@
             <% } %>
             
         </div>
-    
+        <div id="links" class="mobile-view">
+            <i class="fa-solid fa-bars" id="open_responsive_menu"></i>
+        </div>
 
     </header>
+<script>
+
+
+let i_menu=document.getElementById("open_responsive_menu")
+i_menu.addEventListener('click',()=>{
+    open_responsive_menu()
+})
+
+function open_responsive_menu(){
+    document.getElementById('responsive_menu').style.display="flex"
+}
+
+let div_menu=document.getElementById("close_responsive_menu")
+div_menu.addEventListener('click',()=>{
+    close_responsive_menu()
+})
+
+function close_responsive_menu(){
+    document.getElementById('responsive_menu').style.display="none"
+}
+
+
+</script>
 
 <script>
 

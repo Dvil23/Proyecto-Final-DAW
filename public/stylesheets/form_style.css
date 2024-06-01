@@ -62,7 +62,7 @@
   color: #FFFFFA;
 }
 #main_page #specific_course_background .course_container .course_data h1 {
-  font-size: 50px;
+  font-size: 40px;
   margin-top: 5%;
 }
 #main_page #specific_course_background .course_container .course_data p {
@@ -193,6 +193,24 @@
   padding-left: 3%;
   padding-right: 3%;
   padding-top: 5px;
+}
+#main_page #page_content .unit_change_image {
+  marin-top: 7vh;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+#main_page #page_content .unit_change_image p {
+  text-align: center;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-left: 0%;
+  margin-bottom: 0;
+}
+#main_page #page_content .unit_change_image i {
+  font-size: x-large;
+  text-align: center;
+  margin-left: 3vw;
+  color: #E9B44C;
 }
 #main_page #page_content .full {
   flex-direction: column;
@@ -335,6 +353,21 @@
   margin-left: 1%;
 }
 
+.insert_image_file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.insert_image_file input {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+.insert_image_file button {
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+}
+
 @media only screen and (max-width: 768px) {
   #main_page .video-background {
     display: none;
@@ -352,8 +385,10 @@
   }
   #main_page #specific_course_background .course_container .course_data h1 {
     text-align: center;
+    font-size: x-large;
   }
   #main_page #specific_course_background .course_container .course_data p {
+    font-size: large;
     text-align: center;
   }
   #main_page #banner #banner_content p {

@@ -1,78 +1,100 @@
 <%- include("../partials/start.ejs") -%>
+<link rel="stylesheet" href="/stylesheets/course_filter_style.css" class="css">
 </head>
 <body>
 <%- include("../partials/header.ejs") -%>
 
-<div id="main_page">
-
-    <div id="filters">
-        <div id="class_container">
-            <!-- <select id="class_select" name="class_select"></select> -->
+<div id="main_page2">
+    
+    <div id="main_content">
+        <div id="main_content_title">
+            <h1>¡Encuentra el curso perfecto!</h1>
         </div>
-        <!-- <select id="class_select">
-            <option value="">Todas las clases</option>
-            <option value="Unreal Engine">Unreal Engine</option>
-            <option value="Voxels">Voxels</option>
-            <option value="MYSQL">MYSQL</option>
-            <option value="NodeJS">NodeJS</option>
-            <option value="Character design">Character design</option>
-        </select> -->
-        <select id="category">
+        <div id="filter_container">
+            <div id="filter_classes_category">
+                
+                <div class="filter_button">
+                    <select id="category" >
             
-            <option value="">Todas las categorías</option>
-            <% Object.keys(jsonData).forEach(category => { %>
-                <option value="<%= category %>"><%= category %></option>
-            <% }) %>
-        </select>
-
-        <input type="number" id="filter_price_min" placeholder="Precio mínimo" />
-        <input type="number" id="filter_price_max" placeholder="Precio máximo" />
-    </div>
-    <div style="display: flex; flex-wrap:wrap;">
-
-        <% courses.forEach(course=>{ %>
-
-        <div class="course_unit" data-class="<%= course.class %>" data-category="<%= course.category %>" data-price="<%= course.price %>" style="border: 1px solid black; width: auto; min-width: 400px">
-            
-            <div class="course_image">
-
+                        <option value="">Todas las categorías</option>
+                        <% Object.keys(jsonData).forEach(category => { %>
+                            <option value="<%= category %>"><%= category %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div id="class_container" class="filter_button">
+                    <select id="class_select" name="class_select"></select>
+                </div>
             </div>
-
-            <h1><%= course.title %></p>
-            <h3><%= course.category %></h3>
-            <h5><%= course.class %></h3>
-            
-            <div>
-                <span><%= users.find(user => user.id === course.owner_id).username %></span>
-                <% if (course.owner_id===1){ %>
-                    <span>Oficial</span>
-                <% } %>
+            <div id="filter_prices">
+                <input type="number" id="filter_price_min" placeholder="Precio mínimo" />
+                <input type="number" id="filter_price_max" placeholder="Precio máximo" />
             </div>
-            
+        </div>
+        <div id="all_courses_container_background">
+            <div id="background_courses">
+                <video autoplay loop muted>
+                    <source src="/images/tech-background.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div id="all_courses_container">
+                <% courses.forEach(course=>{ %>
 
-            <div>
-                <% if (Math.trunc(course.discount) !== 0) { //Si hay descuento, lo enseña%>
-                <h4><s><%= course.price %>€</s></h4> 
-                <h2><%= course.price - ((course.price * course.discount) / 100) %>€</h2>
-                <h2><%= course.discount %>% OFF</h2>
+                    <% if (Math.trunc(course.discount) !== 0) { %>
+                        <% course_off = course.price - ((course.price * course.discount) / 100) %>
 
-                <% } else{ //Si no hay descuento, pone el precio talcual %> 
-                    <% if(course.price == 0.00) { %>
-                        <h2>Gratis</h2> 
-                    <% }else{ %>
-                        <h2><%= course.price %>€ </h2> 
+                    <div class="course_unit" data-class="<%= course.class %>" data-category="<%= course.category %>" data-price="<%= course_off %>" >
+                    
+                    <% } else{  %>
+
+                        <div class="course_unit" data-class="<%= course.class %>" data-category="<%= course.category %>" data-price="<%= course.price %>" >
+                    
                     <% } %>
-                <% } %>
-            </div>
-
-            <div>
-                <a href="/courses/watch/<%= course.id %>">Ver</a>
+                
+                    
+                        <div class="course_image">
+                            <img src="http://192.168.1.33/images/backgrounds/<%= course.background_image %>" alt="">
+                        </div>
+            
+                        <h1><%= course.title %></p>
+                        <h3><%= course.category %></h3>
+                        <h5><%= course.class %></h3>
+                        
+                        
+                        
+            
+                        <div class="price_container">
+                            <% if (Math.trunc(course.discount) !== 0) { //Si hay descuento, lo enseña%>
+                            <h4><s><%= course.price %>€</s></h4> 
+                            <h2><%= course.price - ((course.price * course.discount) / 100) %>€</h2>
+                            <h2 class="off"><%= course.discount %>% OFF</h2>
+            
+                            <% } else{ //Si no hay descuento, pone el precio talcual %> 
+                                <% if(course.price == 0.00) { %>
+                                    <h2>Gratis</h2> 
+                                <% }else{ %>
+                                    <h2><%= course.price %>€ </h2> 
+                                <% } %>
+                            <% } %>
+                        </div>
+                        <div class="empty"></div>
+                        <div class="watch_button_username">
+                            <div class="username_container">
+                                <a href="/profile/<%= course.owner_id %>">Creado por: <%= users.find(user => user.id === course.owner_id).username %></a>
+                                <% if (course.owner_id===1){ %>
+                                    <p>Oficial</span>
+                                <% } %>
+                            </div>
+                            <a class="button_ver" href="/courses/watch/<%= course.id %>">Ver</a>
+                        </div>
+                    </div>
+                
+                <% }) %>
             </div>
         </div>
-        <br><br>
-        <% }) %>
     </div>
 </div>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -99,8 +121,9 @@
             //valor del input de los precios. Si no hay nada, se pone valor por defecto
             let price_min = parseFloat(filter_price_min.value) || 0
             let price_max = parseFloat(filter_price_max.value) || 700
-
+            
             courses.forEach(course => {
+
                 let course_class = course.getAttribute('data-class')
                 let course_category = course.getAttribute('data-category')
                 let course_price = parseFloat(course.getAttribute('data-price'))
@@ -132,31 +155,39 @@
         let change_select = () => {
             //valor del select de categoria
             let category_val = category.value
-
-            let myselect = document.createElement('select')
-            myselect.id = 'class_select'
-
-            //Creamos una opcion default de todos
-            let myoption = document.createElement("option")
-            myoption.value = ""
-            myoption.text = "Todos"
-            myselect.appendChild(myoption)
-
-            //Por cada valor del array, creamos una opción
-            datos[category_val].forEach(item => {
-                let option = document.createElement("option")
-                option.value = item
-                option.text = item
-                myselect.appendChild(option)
-            })
             
+            if (category_val!==""){
+                let myselect = document.createElement('select')
+                myselect.id = 'class_select'
 
-            class_container.innerHTML = ""
-            class_container.appendChild(myselect)
+                //Creamos una opcion default de todos
+                let myoption = document.createElement("option")
+                myoption.value = ""
+                myoption.text = "Todos"
+                myselect.appendChild(myoption)
 
-            myselect.addEventListener('change', filterCourses)
-            // Aplicamos de nuevo los filtros por que hemos borrado todo el select de las clases
-            filterCourses()  
+                
+                //Por cada valor del array, creamos una opción
+                datos[category_val].forEach(item => {
+                    console.log("adios")
+                    let option = document.createElement("option")
+                    option.value = item
+                    option.text = item
+                    myselect.appendChild(option)
+                })
+                
+
+                class_container.innerHTML = ""
+                class_container.appendChild(myselect)
+
+                myselect.addEventListener('change', filterCourses)
+                // Aplicamos de nuevo los filtros por que hemos borrado todo el select de las clases
+                filterCourses()  
+            }else{
+                console.log("else")
+                filterCourses()
+            }
+            
         }
 
         category.addEventListener("change", change_select)

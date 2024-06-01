@@ -1,0 +1,168 @@
+#main_page {
+  width: 100%;
+  height: 92vh;
+  min-height: 92vh;
+  max-height: 92vh;
+}
+#main_page #main_header {
+  width: 100%;
+  height: 20vh;
+  max-height: 20vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#main_page #main_header #image_container {
+  z-index: -1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+#main_page #main_header #image_container img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  filter: brightness(0.4);
+}
+#main_page #main_header #company_info {
+  z-index: 2;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin-bottom: 2vh;
+  text-align: center;
+}
+#main_page #main_header #company_info a {
+  font-size: 60px;
+  font-weight: bolder;
+  color: #E9B44C;
+}
+#main_page #main_form {
+  width: 100%;
+  height: 72vh;
+  min-height: 72vh;
+  max-height: 72vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#main_page #main_form .video-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  z-index: -3;
+}
+#main_page #main_form .video-background video {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+#main_page #main_form .background-tint {
+  z-index: -2;
+  background-color: rgba(19, 59, 53, 0.6196078431);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+}
+#main_page #main_form form {
+  width: 60%;
+  height: 60vh;
+  max-height: 60vh;
+  min-height: 60vh;
+  background-color: rgba(112, 162, 136, 0.8235294118);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 10px 15px 20px -5px rgb(0, 19, 12);
+  transition: 0.5s;
+}
+#main_page #main_form form:hover {
+  box-shadow: 5px 10px 15px -5px rgb(0, 19, 12);
+  background-color: #70a288;
+}
+#main_page #main_form form .form_unit {
+  width: 60%;
+  height: -moz-fit-content;
+  height: fit-content;
+  min-height: 5vh;
+  margin-bottom: 2vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#main_page #main_form form .form_unit input {
+  width: 100%;
+  min-height: 5vh;
+  background-color: #fffffa;
+  border-radius: 15px;
+  border: none;
+  padding-left: 3%;
+  padding-right: 3%;
+  outline: none;
+}
+#main_page #main_form form .form_unit p {
+  width: 100%;
+  color: #fffffa;
+  margin-left: 1vw;
+  font-size: large;
+  margin-bottom: 0.5vh;
+}
+#main_page #main_form form .form_unit a {
+  color: #E9B44C;
+}
+#main_page #main_form form .form_unit .border_yellow_button {
+  background-color: rgba(0, 0, 0, 0);
+}
+#main_page #main_form form .title_unit {
+  margin-top: 5vh;
+  margin-bottom: 1vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+#main_page #main_form form .title_unit h1 {
+  font-size: x-large;
+  color: #FFFFFA;
+}
+#main_page #main_form form .password_unit {
+  flex-direction: row;
+  justify-content: space-between;
+}
+#main_page #main_form form .password_unit .form_unit {
+  width: 48%;
+}
+
+@media only screen and (max-width: 768px) {
+  #main_page #main_header #company_info a {
+    font-size: x-large;
+  }
+  #main_page #main_form form {
+    max-height: 90%;
+    height: 95%;
+    width: 90%;
+  }
+  #main_page #main_form form .form_unit {
+    width: 80%;
+  }
+  #main_page #main_form form .form_unit p {
+    font-size: small;
+  }
+}/*# sourceMappingURL=login_register_style.css.map */

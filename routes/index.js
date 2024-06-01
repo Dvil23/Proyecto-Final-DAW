@@ -21,8 +21,8 @@ router.use(session({
 
 router.use((req, res, next) => { 
   //Si el usuario está logeado en la sesión, pasa los datos del usuario en local
-  if (req.session && req.session.user) {
-    res.locals.user = req.session.user;
+  if (req.session && req.session.myuser) {
+    res.locals.myuser = req.session.myuser;
   }
   next();
 });
@@ -45,41 +45,7 @@ const sshConfig = {
 
 // Mi landing page
 router.get('/', (req, res, next) => {
-  res.render('index', { message: "aphelios" , test: ""})
-})
-
-
-router.post('/upload', upload.single('file'), (req, res) => {
-
-  const folderName = req.body.folderName
-
-  // Configuración de la conexión SSH
-  const conn = new Client()
-  conn.on('ready', () => {
-    console.log('Conexión SSH establecida')
-
-    conn.sftp((err, sftp) => {
-
-      //Creamos carpeta pra almacenar el video (si el campo está vacio, no crea nada)
-      //Añadir a esta linea { recursive: true } si en el futuro necesito crear mas de una carpeta
-      sftp.mkdir('/var/www/html/videos/' + folderName, (err) => {
-
-        // Guardar el archivo en la carpeta
-        sftp.writeFile('/var/www/html/videos/' + folderName + '/' + req.file.originalname, req.file.buffer, (err) => {
-
-          conn.end()
-
-          res.render('index', { test: 'Archivo guardado en la carpeta: ' + folderName})
-        })
-      })
-    })
-  }).connect(sshConfig)
-})
-
-//Ver videos si pones su ruta en el formulario
-router.post('/view', (req, res, next) => {
-  console.log(req.body.file_path)
-  res.render('view', { message: req.body.file_path })
+  res.render('index')
 })
 
 
@@ -150,25 +116,27 @@ router.post('/login', (req, res, next) => {
   db.query(consulta_check, [email], (error, results) => {
 
     if (results.length > 0) { //Existe el email
-
+      console.log("EXISTE")
       //Hashear la contraseña y compararla con el resultado de la base de datos
       bcrypt.compare(password, results[0].password, (err, correct) => {
 
         //Si todos los datos son correctos, inicia sesión y te redirecciona
         if (correct) {
-          
-          req.session.user= {
+          console.log("CORRECT")
+          req.session.myuser= {
             id: results[0].id,
-            pfp: results[0].pfp
+            mypfp: results[0].pfp,
           }
 
           res.redirect('/')
 
         } else { //Existe el email, pero no coincide con la contraseña
+          console.log("INCORRECTO")
           res.render('login', { message: "El email y contraseña son incorrectos, o no existen" })
         }
       })
     } else { //No existe el email
+      console.log("NO EXISTE")
       res.render('login', { message: "El email y contraseña son incorrectos, o no existen" })
     }
   })

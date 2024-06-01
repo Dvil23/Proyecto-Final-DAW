@@ -80,6 +80,7 @@
   margin-bottom: 1vh;
 }
 #main_page #page_content .half_unit .unit_content textarea {
+  padding-top: 15px;
   min-height: 20vh;
   resize: none;
 }
@@ -109,8 +110,8 @@
   flex-direction: column;
 }
 #main_page #page_content #der .unit_image .image_container {
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   border-radius: 100%;
 }
 #main_page #page_content #der .unit_image .image_container:after {
@@ -121,21 +122,44 @@
 #main_page #page_content #der .unit_image .image_container img {
   width: 100%;
   height: 100%;
-  -o-object-fit: contain;
-     object-fit: contain;
+  -o-object-fit: cover;
+     object-fit: cover;
   border-radius: 100%;
 }
 #main_page #page_content #der .unit_image .insert_file {
   margin-top: 2vh;
   margin-bottom: 2vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-#main_page #page_content #der .unit_image .insert_file p {
-  width: 100%;
+#main_page #page_content #der .unit_image .insert_file p, #main_page #page_content #der .unit_image .insert_file i {
+  width: -moz-fit-content;
+  width: fit-content;
   text-align: center;
   color: #fffffa;
   font-size: large;
   margin-left: 1vh;
   margin-bottom: 2vh;
+  cursor: pointer;
+}
+#main_page #page_content #der .unit_image .insert_file i {
+  color: #E9B44C;
+}
+
+.insert_image_file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.insert_image_file input {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+.insert_image_file button {
+  max-width: -moz-fit-content;
+  max-width: fit-content;
 }
 
 @media only screen and (max-width: 768px) {

@@ -5,7 +5,32 @@ const bcrypt = require('bcrypt')
 
 require('dotenv').config()
 
+const multer  = require('multer')
+const upload = multer({ storage: multer.memoryStorage({ inMemory: true }) })
+
 const saltRounds = 10
+const {upload_image_to_server } = require('../sshUpload');
+const { v4: uuidv4 } = require('uuid');
+
+//Funcion para hacer consultas y esperar
+async function realizarConsulta(consulta, params) {
+    return new Promise((resolve, reject) => {
+      db.query(consulta, params, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+}
+function isAuthenticated(req, res, next) {
+    if (req.session.myuser && req.session.myuser.id) {
+      next(); // Usuario autenticado, continuar con la siguiente función
+    } else {
+      res.redirect('/login'); // Redirigir a la página de login si no está autenticado
+    }
+  }
 
 // libreria session y su configuración
 const session = require('express-session')
@@ -17,46 +42,30 @@ router.use(session({
 
 router.use((req, res, next) => { 
   //Si el usuario está logeado en la sesión, pasa los datos del usuario en local
-  if (req.session && req.session.user) {
-    res.locals.user = req.session.user;
+  if (req.session && req.session.myuser) {
+    res.locals.myuser = req.session.myuser;
   }
   next();
 });
 
 router.get('/', async (req, res) => {
-    if (!req.session.user || !req.session.user.id) {
-        return res.redirect('/login')
+    if (req.session.myuser && req.session.myuser.id){
+        res.redirect(`/profile/${req.session.myuser.id}`) 
+    }else{
+        res.redirect('/')
     }
-    const ownerId = req.session.user.id;
-    const consulta_check = "SELECT * FROM courses WHERE owner_id = ?";
+   
+});
 
-    try {
-        db.query(consulta_check, [ownerId], (error, results) => {
-          if (error) { //CAMBIAR
-            console.error('Error al realizar la consulta:', error);
-            return res.status(500).send('Error al obtener los cursos');
-          }
+//----------GET MOSTRAR PÁGINA DE EDITAR TUS DATOS---------------
+router.get('/account', isAuthenticated, (req, res) => {
     
-          res.render('profile', { courses: results });
-        });
-      } catch (error) { //CAMBIAR
-        console.error('Error en el try/catch:', error);
-        res.redirect('/');
-        return;
-      }
-});
-
-router.post('/:id', (req, res) => {
-    let course_id = req.params.id;
-    res.redirect(`/courses/watch/${course_id}`);
-});
-
-router.get('/account', (req, res) => {
     let consulta_check="SELECT * FROM users WHERE id = ?"
     try{
-        db.query(consulta_check,[req.session.user.id],(error,results)=>{
+        //Buscamos tu usuario con tu id de la session y mostramos la página con tus datos
+        db.query(consulta_check,[req.session.myuser.id],(error,results)=>{
             results = results[0]
-            res.render('profile/account',{username: results.username, phone: results.phone, type: results.type, message: ""})
+            res.render('profile/account',{username: results.username, phone: results.phone, type: results.type, message: "",biography: results.biography})
             
         })
     } catch {
@@ -66,75 +75,162 @@ router.get('/account', (req, res) => {
     }
 });
 
-router.get('/password', (req, res) => {
-    res.render('profile/password',{message:""})
-});
-router.get('/wishlist', (req, res) => {
-    res.render('profile/wishlist')
-});
-router.get('/deactivate', (req, res) => {
-    res.render('profile/deactivate')
-});
+//----------GET MOSTRAR PÁGINA DE PERFIL DE USUARIO DE CUALQUIER USUARIO---------------
+router.get('/:id', async (req, res) => {
+    let user_id = req.params.id;
+    let consulta_find = "SELECT * FROM users WHERE id = ?";
+    let user = await realizarConsulta(consulta_find,[user_id]);
+    user=user[0]
 
+    let consulta_find_created_courses = "SELECT * FROM courses WHERE owner_id = ?";
+    let courses_owned = await realizarConsulta(consulta_find_created_courses,[user_id]);
 
-//ACTUALIZAR USERNAME Y PHONE DEL USUARIO
-router.post('/account', (req, res) => {
+    let consulta_bought_courses = "SELECT * FROM user_course WHERE user_id = ?";
+    let courses_bought = await realizarConsulta(consulta_bought_courses,[user_id]);
 
-    username_form=req.body.username_form
-    phone_form=req.body.phone_form
+    let consulta_select_users = "SELECT * FROM users";
+    let users = await realizarConsulta(consulta_select_users,[]);
 
-    try{
-        let consulta_check="SELECT * FROM users WHERE username = ?"
-        db.query(consulta_check,[username_form],(error,results)=>{
-
-            results = results[0]
-
-            if (results==undefined){ 
-                //SI EL NOMBRE DE USUARIO NO EXISTE, LO CAMBIA
-                let consulta_update="UPDATE users SET username = ?, phone = ? WHERE id = ?"
-                db.query(consulta_update,[username_form,phone_form,req.session.user.id])
-                res.redirect('/profile')
-            }else{  
-                //SI EL NOMBRE DE USUARIO YA EXISTE, NO LO CAMBIA
-                res.render('profile/account',{username: results.username, phone: results.phone, type: results.type, message:"Ya hay un usuario con ese nombre"})
-            }
-        })
-    } catch {  res.redirect('/') }
-});
-
-//CAMBIAR CONTRASEÑA
-router.post('/password', (req, res) => {
-
-    pass=req.body.pass_form
-    pass_repeat=req.body.pass_form_repeat
-
-    if (pass!=pass_repeat){ 
-        //SI NO COINCIDEN LAS CONTRASEÑAS
-        res.render('profile/password',{message:"Las contraseñas no coinciden"})
-    }else{
-
-        let consulta_check="SELECT * FROM users WHERE id = ?"
-        db.query(consulta_check,[req.session.user.id],(error,results)=>{
-            bcrypt.compare(pass, results[0].password, (err, correct) => {
-
-                if(correct){ 
-                    //SI ES LA MISMA CONTRASEÑA DE ANTES
-                    res.render('profile/password',{message:"No puedes cambiar la contraseña a tu contraseña antigua"})
-                }else{ 
-                    //SI ES UNA NUEVA CONTRASEÑA
-                    bcrypt.genSalt(saltRounds, function(err, salt) {
-                        bcrypt.hash(pass, salt, function(err, hash) {
-                            let consulta_update="UPDATE users SET password = ? WHERE id = ?"
-                            db.query(consulta_update,[hash,req.session.user.id])
-                            res.redirect('/profile')
-                        })
-                    })
-                }
-            }) 
-        })    
+    let all_courses=[]
+    for (const course of courses_bought) {
+        let consulta_specific_course = "SELECT * FROM courses WHERE id = ?";
+        let specific_course = await realizarConsulta(consulta_specific_course, [course.course_id]);
+        all_courses.push(specific_course[0])
     }
+
+    res.render('profile/profile', { user, courses_owned, courses_bought: all_courses,users });
+
 })
 
+
+
+
+
+// ----------POST PARA ACTUALIZAR DATOS DEL USUARIO--------------
+router.post('/account', isAuthenticated, async (req, res) => {
+    try {
+        let { username_form, phone_form, biography_form, pass_form, pass_form_repeat } = req.body;
+        let user_id = req.session.myuser.id;
+
+        let consulta_find = "SELECT * FROM users WHERE id = ?";
+        let results = await realizarConsulta(consulta_find, [user_id]);
+        results = results[0];
+        
+        let changes = false;
+        let message = "";
+
+        // Si el username del formulario y el de la base de datos es diferente, quiere cambiarlo, asi que procedemos
+        if (results.username != username_form) {
+            let consulta_find_same_username = "SELECT * FROM users WHERE username = ?";
+            let same_username = await realizarConsulta(consulta_find_same_username, [username_form]);
+            
+            if (same_username.length > 0) {
+                res.render('profile/account', {
+                    username: results.username,
+                    phone: results.phone,
+                    type: results.type,
+                    message: "Ese nombre de usuario ya está en uso",
+                    biography: results.biography
+                });
+                return;
+            } else {
+                let consulta_update = "UPDATE users SET username = ? WHERE id = ?";
+                await realizarConsulta(consulta_update, [username_form, user_id]);
+                results.username = username_form; // Actualizar el objeto results
+                changes = true;
+                console.log("Username cambiado");
+            }
+        }
+
+        // Si el phone del formulario y el de la base de datos es diferente, quiere cambiarlo, asi que procedemos
+        if (results.phone != phone_form) {
+            let consulta_find_same_phone = "SELECT * FROM users WHERE phone = ?";
+            let same_phone = await realizarConsulta(consulta_find_same_phone, [phone_form]);
+            
+            if (same_phone.length > 0) {
+                res.render('profile/account', {
+                    username: results.username,
+                    phone: results.phone,
+                    type: results.type,
+                    message: "Ese número de teléfono ya está en uso",
+                    biography: results.biography
+                });
+                return;
+            } else {
+                let consulta_update = "UPDATE users SET phone = ? WHERE id = ?";
+                await realizarConsulta(consulta_update, [phone_form, user_id]);
+                results.phone = phone_form; // Actualizar el objeto results
+                changes = true;
+                console.log("Phone cambiado");
+            }
+        }
+
+        // Si alguno de los campos contraseña no está vacío, es que quiere cambiar la contraseña
+        if (pass_form && pass_form_repeat) {
+            if (pass_form != pass_form_repeat) {
+                res.render('profile/account', {
+                    username: results.username,
+                    phone: results.phone,
+                    type: results.type,
+                    message: "Las contraseñas no coinciden",
+                    biography: results.biography
+                });
+                return;
+            } else {
+                let salt = await bcrypt.genSalt(saltRounds);
+                let hash = await bcrypt.hash(pass_form, salt);
+                let consulta_update = "UPDATE users SET password = ? WHERE id = ?";
+                await realizarConsulta(consulta_update, [hash, user_id]);
+                changes = true;
+                console.log("Contraseña cambiada");
+            }
+        }
+
+        // Actualizar biography
+        if (results.biography !== biography_form) {
+            let consulta_update = "UPDATE users SET biography = ? WHERE id = ?";
+            await realizarConsulta(consulta_update, [biography_form, user_id]);
+            results.biography = biography_form; // Actualizar el objeto results
+            changes = true;
+            console.log("Biography cambiada");
+        }
+
+        if (changes) {
+            message = "Los datos han sido cambiados con éxito.";
+        }
+
+        res.render('profile/account', {
+            username: results.username,
+            phone: results.phone,
+            type: results.type,
+            message,
+            biography: results.biography
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error en el servidor");
+    }
+});
+
+router.post('/change_image', upload.single('file'), isAuthenticated, async (req, res) => {
+    let user_id = req.session.myuser.id;
+    const folderName = "pfp";
+    const file_name = `${uuidv4()}.jpg`;
+
+    console.log("CHANGE IMAGE")
+    try {
+        console.log("try")
+        await upload_image_to_server(folderName, req.file, file_name);
+        console.log("after")
+        let consulta_update = "UPDATE users SET pfp = ? WHERE id = ?";
+        await realizarConsulta(consulta_update, [file_name, user_id]);
+        res.locals.myuser.mypfp=file_name
+        res.redirect('/profile');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error subiendo la imagen');
+    }
+});
 
 
 module.exports = router

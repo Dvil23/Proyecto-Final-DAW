@@ -200,26 +200,21 @@
 
         let category_val = category.value
 
-        if (category_val=="otro"){
-            //Si es otro, quita el select y pone un input de texto
-            class_container.innerHTML=""
-            class_container.innerHTML="<input type='text' name='otro'>"
-        }else{
-            //Si es otra cosa, quita lo anterior para añadir lo nuevo
-            class_container.innerHTML=""
-            class_container.innerHTML="<select id='class_select' name='class_select'></select>"
-            let class_select = document.getElementById("class_select")
+        //Si es otra cosa, quita lo anterior para añadir lo nuevo
+        class_container.innerHTML=""
+        class_container.innerHTML="<select id='class_select' name='class_select'></select>"
+        let class_select = document.getElementById("class_select")
 
-            //Crea una opcion por cada dato del array
-            for (let i=0; i<datos[category_val].length; i++) {
-                
-                var option = document.createElement("option")
-                option.value = datos[category_val][i]
-                option.text = datos[category_val][i]
+        //Crea una opcion por cada dato del array
+        for (let i=0; i<datos[category_val].length; i++) {
+            
+            var option = document.createElement("option")
+            option.value = datos[category_val][i]
+            option.text = datos[category_val][i]
 
-                class_select.appendChild(option)
-            }
+            class_select.appendChild(option)
         }
+        
         
     }
 

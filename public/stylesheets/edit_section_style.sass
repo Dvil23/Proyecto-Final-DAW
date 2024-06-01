@@ -1,0 +1,255 @@
+#main_page
+    width: 100%
+    height: 92vh
+    max-height: 92vh
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: row
+    #left_banner, #main_content
+        -ms-overflow-style: none
+        scrollbar-width: none
+    #left_banner::-webkit-scrollbar, .right::-webkit-scrollbar 
+        display: none
+    #main_content
+        width: 80%
+        height: 92vh
+        overflow-y: auto
+        position: relative
+        #specific_course_background
+            background-color: red
+            width: 100%
+            max-height: 110vh
+            min-height: 96vh
+            position: absolute
+            z-index: -1
+            overflow: hidden
+            .course_container
+                width: 100%
+                height: 46vh
+                max-height: 46vh
+                position: relative
+                .image_container_course
+                    width: 100%
+                    height: 100%
+                    object-fit: cover
+                    position: absolute
+                    img
+                        width: 100%
+                        height: 100%
+                        object-fit: cover
+                        filter: brightness(0.5)
+                .course_data
+                    position: absolute
+                    margin-left: 12%
+                    margin-top: 5%
+                    color: #FFFFFA
+                    h1
+                        font-size: 40px
+                        margin-top: 5%
+                    p
+                        font-size: xx-large
+                        margin-top: 1% 
+            #background-fill
+                width: 100%
+                min-height: 500vh
+                max-height: 500vh
+                height: 500vh
+                background-color: #244F45
+        #section_info
+            width: 100%
+            max-width: 100%
+            border-radius: 15px
+            height: 96vh
+            display: flex
+            align-items: center
+            justify-content: center
+            #section_content
+                width: 60vw
+                height: 60vh
+                margin-top: 15vh
+                border-radius: 15px
+                display: flex
+                align-items: center
+                justify-content: center
+                flex-direction: column
+                background-color: #70A288
+                .unit
+                    width: 80%
+                    min-height: 5vh
+                    display: flex
+                    align-items: center
+                    margin-top: 2vh
+                    justify-content: space-between
+                    flex-direction: column
+                    .border_yellow_button
+                        background-color: #70A288
+                    .input_unit
+                        width: 48%
+                        height: 100%
+                    .alone_button
+                        margin-top: 3vh
+                        display: flex
+                        align-items: flex-end
+                        justify-content: flex-end
+                        height: 100%
+                        min-height: 100%
+                        p
+                            display: none
+                        button
+                            min-height: 5vh
+                        
+                    p
+                        width: 100%
+                        color: #fffffa
+                        font-weight: bold
+                        font-size: x-large
+                        margin-left: 3%
+                        margin-bottom: 0.5vh
+                    
+
+                    input, select
+                        font-size: large
+                        width: 100%
+                        min-height: 5vh
+                        background-color: #fffffa
+                        border-radius: 15px
+                        border: none
+                        padding-left: 3%
+                        padding-right: 3%
+                        outline: none
+                        margin-bottom: 0
+                    .file
+                        margin-top: 0!important
+                        background-color: #00000000
+                        height: fit-content
+                        max-height: fit-content
+                        min-height: fit-content
+                    textarea
+                        font-size: large
+                        width: 100%
+                        border-radius: 15px
+                        border: none
+                        min-height: 15vh
+                        height: auto
+                        resize: none
+                        outline: none
+                        padding-left: 3%
+                        padding-right: 3%
+                        padding-top: 5px
+                .alone_button
+                    justify-content: flex-end
+                    align-items: flex-end
+                .full
+                    flex-direction: column
+                    align-items: flex-start
+
+
+
+    #left_banner
+        background-color: green
+        width: 20%
+        height: 92vh
+        overflow-y: auto
+        background-color: #70A288
+        display: flex
+        align-items: center
+        flex-direction: column
+        .title_left_banner
+            margin-top: 5vh
+            with: 90%
+            padding-bottom: 2vh
+            border-bottom: 2px solid #fffffa
+            h1
+                color: #fffffa
+                
+        .container_regular_user
+            margin-top: 5vh
+            width: 90%
+            height: fit-content
+            z-index: 40
+            .segmento
+                width: 100%
+                margin-top: 2vh
+                background-color: #244F45
+
+                padding-bottom: 3vh
+                border-radius: 15px
+                display: flex
+                align-items: center
+                justify-content: center
+                flex-direction: column
+                .title_container_regular_user
+                    width: 100%
+                    background-color: #133B35
+                    padding-top: 2vh
+                    padding-bottom: 2vh
+                    margin-bottom: 1vh
+                    border-radius: 15px 15px 0px 0px
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    text-align: center
+                    p
+                        font-size: larger
+                        font-weight: 500
+                        color: #E9B44C
+                .componente
+                    width: 90%
+                    height: fit-content
+                    min-height: 5vh
+                    border: 2px solid #E9B44C
+                    margin-top: 1vh
+                    border-radius: 15px
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    cursor: pointer
+                    p, a
+                        padding-top: 0.5vh
+                        padding-bottom: 0.5vh
+                        text-decoration: none
+                        width: 90%
+                        font-weight: 500
+                        color: #E9B44C
+                        text-align: center
+
+
+@media only screen and (max-width: 768px)
+    #main_page
+        #left_banner
+            display: none
+            .title_left_banner
+                margin-top: 20vh
+                
+        #main_content
+            width: 100%
+            #specific_course_background
+                .course_container
+                    .course_data
+                        margin-left: 0
+                        h1
+                            font-size: x-large
+                            text-align: center
+                        p
+                            font-size: larger
+                            text-align: center
+                #background-fill
+                    padding-bottom: 100vh
+            #section_info
+                width: 100%
+                margin-left: 0
+                #section_content
+                    width: 90%
+                    .unit
+                        .border_yellow_button
+                            font-size: medium
+                        p
+                            width: 100%
+                            word-break: break-all
+                            font-size: medium
+                        input
+                            font-size: medium
+                        
+                        a
+                            font-size: smaller!important

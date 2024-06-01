@@ -9,7 +9,7 @@
 
     <div id="scroll_lock">
         
-    
+        <%- include("../partials/open_apartados_responsive.ejs") -%>
     
         <div id="main_content">
             <div id="price_container">
@@ -49,15 +49,15 @@
             </div>
             <div id="image_header">
                 <div id="image_container">
-                    <img src="/images/ue-2.jpg" alt="">
+                    <img src="http://192.168.1.33/images/backgrounds/<%= course.background_image %>" alt="">
                 </div>
-                <div id="title_container">
-                    <h1><%= course.title %></h1>
-                    <h3><%= course.class %></h3>
-                    <h3><%= course.category %></h3>
+                <div id="title_container"  >
+                    <h1 class="animate__animated animate__bounceInLeft"><%= course.title %></h1>
+                    <h3 class="animate__animated animate__bounceInLeft" style="animation-delay: 0.2s"><%= course.class %></h3>
+                    <h3 class="animate__animated animate__bounceInLeft" style="animation-delay: 0.4s"><%= course.category %></h3>
                 </div>
                 <div id="created_by">
-                    <span>Creado por:</span>
+                    <a href="/profile/<%= course.owner_id %>">Creado por: <%= owner_username %></a>
                 </div>
             </div>
             <div id="information_container">
@@ -66,11 +66,11 @@
                         <% if (reviews.length !== 0) { %>
                             <% for (let i = 0; i < 5; i++) { %>
                                 <% if (i < Math.floor(course.rating)) { %>
-                                    <i class="fa-solid fa-star"></i>
+                                    <i style="animation-delay: 1.<%= i+1 %>s" class="fa-solid fa-star animate__animated animate__bounceIn"></i>
                                 <% } else if (i === Math.floor(course.rating) && course.rating % 1 >= 0.5) { %>
-                                    <i class="fa-solid fa-star-half-stroke"></i>
+                                    <i style="animation-delay: 1.<%= i+1 %>s" class="fa-solid fa-star-half-stroke animate__animated animate__bounceIn"></i>
                                 <% } else { %>
-                                    <i class="fa-regular fa-star"></i>
+                                    <i style="animation-delay: 1.<%= i+1 %>s" class="fa-regular fa-star animate__animated animate__bounceIn"></i>
                                 <% } %>
                             <% } %>
                         <% } %>
@@ -93,6 +93,7 @@
                                     <span>Este curso aún no ha recibido ninguna review </span>
                         
                                 <% }else{ //Si NO es 0 %>
+                                <span>(<%= course.rating %>)</span>
                                 <span>Número total de reviews: <%= reviews.length %> </span>
                                 <span>Adquiere el curso para dejar una tú también </span>
                                 <% } %>
@@ -103,11 +104,13 @@
                                     <span>¡Se tú el primero en hacerlo!</span>
                 
                                 <% }else if(p_rating==0){ //NO ha hecho review %>
+                                    <span>(<%= course.rating %>)</span>
                                     <span>Número total de reviews: <%= reviews.length %> </span>
                                     <span>¡Puedes dejar una tú también para ayudar a otros usuarios!</span>
-                                    <span><%= course.rating %></span>
+                                    
                                         
                                 <% }else if(p_rating !==0){ //SÍ ha hecho review %>
+                                    <span>(<%= course.rating %>)</span>
                                 <span>Número total de reviews: <%= reviews.length %> </span>
                     
                                     <% if(p_rating===1){ //Si la valoración es 1, te lo muestra en singular %>
@@ -177,7 +180,7 @@
                                     <% results_sections.forEach(component =>{ %>
                                         <% if(component.segment===i){ %>
 
-                                        <div class="item" value="<%= component.id %>">
+                                        <div class="item"  value="<%= component.id %>">
                                             <p><% if (i!==0){ %> <%= component.segment %>-<%= component.component %><% } %> <%= component.title %></p>
                                             <div class="icons">
                                                 <i class="fa-solid fa-eye watch_component" value="<%= component.id %>"></i>
@@ -228,7 +231,13 @@
 
                             <% count = 0; all_comments.forEach(comment=>{  %>
                                 <div class="unit_review">
-                                    <h4><%= comment.username %></h4>    
+                                    <div class="username_and_pfp">
+                                        <div class="image_container_pfp">
+                                            <img src="http://192.168.1.33/images/pfp/<%= comment.specific_pfp %>" alt="">
+                                        </div>
+                                        <h4><%= comment.username %></h4>    
+                                    </div>
+                                    
                                     <div class="comment_star">
                                         <% for(let i=0; i<5; i++){ %>
                                             <% if (i<comment.stars) { %>
@@ -252,20 +261,14 @@
                 </div>
             </div>
         </div>
+       
         <div id="left_banner">
-
+            <%- include("../partials/see_sections.ejs") -%>
 
         </div>
-        <div id="my_footer">
-            <div class="footer_unit top">
-                <p>Email de contacto: info@empresa.com</p>
-            </div>
-            <div class="footer_unit">
-                <p>Política de Privacidad y Términos de Servicio disponibles bajo solicitud.</p>
-                <p>Todos los derechos de imagenes, videos y multimedia reservados a su autor. </p>
-            </div>
-        </div>
-    </section>
+
+        
+
     </div>
     
 </section>
@@ -564,13 +567,13 @@
             title: 'Datos de la Tarjeta de Crédito',
             html: `
                 <form id="paymentForm">
-                    <label for="cardNumber">Número de Tarjeta</label>
+                    <p>Número de Tarjeta</p>
                     <input type="text" id="cardNumber" name="cardNumber" class="swal2-input" required>
                     
-                    <label for="expiryDate">Fecha de Expiración</label>
+                    <p>Fecha de Expiración</p>
                     <input type="text" id="expiryDate" name="expiryDate" class="swal2-input" required>
                     
-                    <label for="cvv">CVV</label>
+                    <p>CVV</p>
                     <input type="text" id="cvv" name="cvv" class="swal2-input" required>
                 </form>
             `,

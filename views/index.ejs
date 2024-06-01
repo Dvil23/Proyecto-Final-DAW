@@ -1,24 +1,140 @@
 <%- include("./partials/start.ejs") -%>
-
+<link rel="stylesheet" href="/stylesheets/index_style.css" class="css">
+</head>
+<body>
 <%- include("./partials/header.ejs") -%>
    
-<h1>Buscar video</h1>
+<div id="main_page">
+  <div id="happy_woman" class="animate__animated animate__fadeInUp">
+    <img src="/images/happy-woman.png" alt="">
+  </div>
+  <div id="main_header">
+    <div id="image_container" >
+        <img src="/images/official-background.jpg" alt="">
+    </div>
+    <div id="company_info" >
+        <h1 class="animate__animated animate__bounceInLeft">TechTeach</h1>
+        <span class="animate__animated animate__bounceInLeft">Mantente al Día y  domina el Futuro:<br>
+          Aprende las Tecnologías que Definen el Mañana</span>
+    </div>
+  </div>
+  <div id="main_information">
+    <div id="title">
+      <h1>Aprende con nuestra comunidad</h1>
+    </div>
+    <div id="information_stripe">
+      <p>Encuentra cursos creados por nuestro equipo o por la comunidad acerca de todas las nuevas tecnologias y aplicaciones.</p>
+      <br>
+      <span>¡O puedes crearlo tú mismo!</span>
+    </div>
+    <div id="background-square"></div>
+    <div id="absolute_image">
+      <img src="/images/economy.jpg" alt="">
+    </div>
+  </div>
+  <div id="context_information">
+    <div class="background-tint"></div>
+    <div class="video-background">
+      <video autoplay loop muted>
+          <source src="/images/tech-background.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div id="content_container" class="context_text">
+      <div class="context_unit">
+        <h1>Informática</h1>
+        <span>Excel, Word, Adobe...</span>
+      </div>
+      <div class="context_unit">
+        <h1>Programación</h1>
+        <span>Python, Java, C++, Go, Ruby,...</span>
+      </div>
+      <div class="context_unit">
+        <h1>Desarollo web</h1>
+        <span>Angular, Vue, NodeJS, React...</span>
+      </div>
+      <div class="context_unit">
+        <h1>Analisis de datos</h1>
+        <span>SQL, MYSQL, consultas...</span>
+      </div>
+      <div class="context_unit">
+        <h1>Desarollo de videojuegos</h1>
+        <span>Unreal Engine, Unity, Level design...</span>
+      </div>
+      <div class="context_unit">
+        <h1>3D Design</h1>
+        <span>Blender, Blockbench, Voxels...</span>
+      </div>
+      <div class="context_unit">
+        <h1>Graphic Design</h1>
+        <span>Photoshop, Gimp...</span>
+      </div>
+      <div class="context_unit_yellow">
+        <h1>¡Y muchos más!</h1>
+      </div>
+    </div>
+    <div class="button_container">
+      <a href="/courses"class="border_yellow_button">Buscar cursos</a>
+    </div>
+    
+  </div>
+</div>
+<script>
 
-<form action="/view" method="post">
-  <input type="text" name="file_path" placeholder="Nombre del archivo">
-  <button type="submit">Ver archivo</button>
-</form>
+let last_div;
+let last_div_up;
+document.addEventListener('scroll', function() {
+  // Verificar si estamos en un dispositivo móvil
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  
+  if (isMobile) {
+    // Si estamos en un dispositivo móvil, salir de la función
+    return;
+  }
 
-<br>
+  const windowHeight = window.innerHeight;
+  const contextUnits = document.querySelectorAll('.context_unit');
+  const middleY = windowHeight / 2;
 
-<h1>Subir video</h1>
+  let closestDistance = Number.POSITIVE_INFINITY;
+  let closestElement = null;
 
-<form action="/upload" method="post" enctype="multipart/form-data">
-  <input type="file" name="file">
-  <input type="text" name="folderName" placeholder="Nombre de la carpeta">
-  <button type="submit">Subir Video</button>
-</form>
+  // Iterar sobre todos los elementos con clase 'context_unit'
+  contextUnits.forEach(function(contextUnit) {
+    // Obtener la posición vertical del elemento
+    const rect = contextUnit.getBoundingClientRect();
+    const elementY = rect.top + rect.height / 2;
 
-<p><%= test %></p>
+    // Calcular la distancia entre el centro de la ventana y el centro del elemento
+    const distance = Math.abs(middleY - elementY);
 
+    // Si la distancia es menor que la distancia más cercana actual, actualizar
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestElement = contextUnit;
+    }
+  });
+
+  if (last_div === closestElement) {
+    return;
+  } else {
+    last_div_up = last_div;
+    last_div = closestElement;
+
+    let next = false;
+    // Restablecer el estilo de 'justify-content' para todos los elementos
+    contextUnits.forEach(function(contextUnit) {
+      let span = contextUnit.querySelector('span');
+      if (last_div_up === contextUnit) {
+        span.style.marginLeft = "15%";
+      } else {
+        span.style.marginLeft = "0%";
+      }
+    });
+
+    let span = closestElement.querySelector('span');
+    span.style.marginLeft = "30%";
+  }
+});
+
+</script>
 <%- include("./partials/end.ejs") -%>

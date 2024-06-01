@@ -1,0 +1,147 @@
+#main_page
+    width: 100%
+    height: 92vh
+    min-height: 92vh
+    max-height: 92vh
+    #main_header
+        width: 100%
+        height: 20vh
+        max-height: 20vh
+        position: relative
+        display: flex
+        align-items: center
+        justify-content: center
+        #image_container
+            z-index: -1
+            position: absolute
+            width: 100%
+            height: 100%
+            object-fit: cover
+            img
+                
+                width: 100%
+                height: 100%
+                object-fit: cover
+                filter: brightness(0.4)
+        #company_info
+            z-index: 2
+            width: fit-content
+            height: fit-content
+            margin-bottom: 2vh
+            text-align: center
+            a
+                font-size: 60px
+                font-weight: bolder
+                color: #E9B44C
+    #main_form
+        width: 100%
+        height: 72vh
+        min-height: 72vh
+        max-height: 72vh
+        position: relative
+        display: flex
+        align-items: center
+        justify-content: center
+        .video-background 
+            position: absolute
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            overflow: hidden
+            position: absolute
+            z-index: -3
+            video 
+                width: 100%
+                height: 100%
+                object-fit: cover
+        .background-tint
+            z-index: -2
+            background-color: #133b359e
+            position: absolute
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            overflow: hidden
+            position: absolute
+        form
+            width: 60%
+            height: 60vh
+            max-height: 60vh
+            min-height: 60vh
+            background-color: #70a288d2 
+            border-radius: 20px
+            display: flex
+            align-items: center
+            // justify-content: center
+            flex-direction: column
+            box-shadow: 10px 15px 20px -5px rgb(0, 19, 12)
+            transition: 0.5s
+            &:hover
+                box-shadow: 5px 10px 15px -5px rgb(0, 19, 12)
+                background-color: #70a288 
+            .form_unit
+                width: 60%
+                height: fit-content
+                min-height: 5vh
+                margin-bottom: 2vh
+                display: flex
+                align-items: center
+                justify-content: center
+                flex-direction: column
+                
+                input
+                    width: 100%
+                    min-height: 5vh
+                    background-color: #fffffa
+                    border-radius: 15px
+                    border: none
+                    padding-left: 3%
+                    padding-right: 3%
+                    outline: none
+                p
+                    width: 100%
+                    color: #fffffa
+                    margin-left: 1vw
+                    font-size: large
+                    margin-bottom: 0.5vh
+                a
+                    color: #E9B44C
+                .border_yellow_button
+                    background-color: #00000000
+
+            .title_unit
+                margin-top: 5vh
+                margin-bottom: 1vh
+                display: flex
+                align-items: center
+                justify-content: center
+                text-align: center
+                h1
+                    font-size: x-large
+                    color: #FFFFFA
+            .password_unit
+                flex-direction: row
+                justify-content: space-between
+                .form_unit
+                    width: 48%
+                
+
+@media only screen and (max-width: 768px)
+    #main_page
+        #main_header
+            #company_info
+                a
+                    font-size: x-large
+        #main_form
+            form
+                max-height: 90%
+                height: 95%
+                width: 90%
+                .form_unit
+                    width: 80%
+                    p
+                        font-size: small
+
+            

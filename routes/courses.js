@@ -2,14 +2,14 @@ const db = require('../db')
 const express = require('express')
 const router = express()
 const fs = require('fs');
-
+const { v4: uuidv4 } = require('uuid');
 
 const multer  = require('multer')
 const upload = multer({ storage: multer.memoryStorage({ inMemory: true }) })
 
 
 require('dotenv').config()
-const { upload_to_server, delete_from_server } = require('../sshUpload');
+const { upload_to_server, delete_from_server, upload_image_to_server } = require('../sshUpload');
 
 
 // libreria session y su configuración
@@ -35,7 +35,7 @@ async function realizarConsulta(consulta, params) {
 }
 
 function isAuthenticated(req, res, next) {
-  if (req.session.user && req.session.user.id) {
+  if (req.session.myuser && req.session.myuser.id) {
     next(); // Usuario autenticado, continuar con la siguiente función
   } else {
     res.redirect('/login'); // Redirigir a la página de login si no está autenticado
@@ -45,8 +45,8 @@ function isAuthenticated(req, res, next) {
 
 router.use((req, res, next) => { 
   //Si el usuario está logeado en la sesión, pasa los datos del usuario en local
-  if (req.session && req.session.user) {
-    res.locals.user = req.session.user;
+  if (req.session && req.session.myuser) {
+    res.locals.myuser = req.session.myuser;
   }
   next();
 });
@@ -80,7 +80,7 @@ router.get('/new', isAuthenticated, (req, res) => {
 //-----------GET MIRAR CURSO ESPECIFICO-----------
 router.get('/watch/:id', isAuthenticated, async (req, res) => {
   let course_id = req.params.id;
-  let user_id = req.session.user.id
+  let user_id = req.session.myuser.id
 
   
   let consulta_select = "SELECT * FROM courses WHERE id = ?";
@@ -148,6 +148,7 @@ router.get('/watch/:id', isAuthenticated, async (req, res) => {
 
       all_comments.push({
         username: user_done_review[0].username,
+        specific_pfp: user_done_review[0].pfp,
         comment: unique_rev.review,
         stars: unique_rev.personal_rating
       });
@@ -156,14 +157,19 @@ router.get('/watch/:id', isAuthenticated, async (req, res) => {
 
   let reviews = results_reviews;
 
-  res.render('courses/watch', { course,reviews,course_tags,is_owned,is_bought,p_rating,price_discount,course_id,p_description,all_comments, results_sections, result_total_segments});
+  //Conseguir TODAS las compras/reviews del curso
+  let consulta_get_owner = "SELECT * FROM users WHERE id = ?";
+  let owner_username = await realizarConsulta(consulta_get_owner, [course.owner_id]);
+  owner_username = owner_username[0].username
+
+  res.render('courses/watch', { course,reviews,course_tags,is_owned,is_bought,p_rating,price_discount,course_id,p_description,all_comments, results_sections, result_total_segments, owner_username});
 })
 
 //-----------GET MIRAR SECCION DE CURSO ESPECIFICO-----------
 router.get('/watch/:course_id/:component_id', isAuthenticated, async (req, res) => {
   let course_id = req.params.course_id;
   let component_id = req.params.component_id;
-  let user_id = req.session.user.id
+  let user_id = req.session.myuser.id
 
 
   let consulta_find = "SELECT * FROM courses WHERE id = ?";
@@ -192,7 +198,7 @@ router.get('/watch/:course_id/:component_id', isAuthenticated, async (req, res) 
   section = section[0]
 
   //No puedes entrar si no tiene video (a menos que seas el owner)
-  if (!is_owned && section.video_name===null || section.video_name===""){
+  if (!is_owned && section.video_name===null || !is_owned && section.video_name===""){
     res.redirect('/')
     return
   }
@@ -219,7 +225,7 @@ router.get('/watch/:course_id/:component_id', isAuthenticated, async (req, res) 
 //-----------GET EDITAR CURSO-----------
 router.get('/edit/:id', isAuthenticated, async (req, res) => {
   let course_id = req.params.id;
-  let user_id = req.session.user.id
+  let user_id = req.session.myuser.id
 
   let consulta_find = "SELECT * FROM courses WHERE id = ? AND owner_id = ?";
   let course=await realizarConsulta(consulta_find, [course_id,user_id])
@@ -241,11 +247,12 @@ router.get('/edit/:id', isAuthenticated, async (req, res) => {
 })
 
 //-----------GET EDITAR SECCIÓN DE CURSO-----------
-router.get('/edit/:course_id/:component_id', isAuthenticated, async (req, res) => {
+router.get('/edit/:course_id/:component_id',  async (req, res) => {
   let course_id = req.params.course_id;
   let component_id = req.params.component_id;
-  let user_id = req.session.user.id
+  let user_id = req.session.myuser.id
 
+  console.log("aqui")
   let consulta_find = "SELECT * FROM courses WHERE id = ?";
   let course=await realizarConsulta(consulta_find, [course_id])
   course= course[0]
@@ -259,14 +266,37 @@ router.get('/edit/:course_id/:component_id', isAuthenticated, async (req, res) =
   let section=await realizarConsulta(consulta_find_section, [component_id])
   section= section[0]
 
-  res.render(`courses/section/edit_component`,{course,section})
+  //Conseguir las secciones del curso
+  let consulta_get_sections = "SELECT * FROM sections WHERE course_id = ? ORDER BY segment, component"
+  let results_sections = await realizarConsulta(consulta_get_sections, [course_id]);
+
+  //Conseguir cuantos segmentos distintos hay 
+  let consulta_total_segments = "SELECT MAX(segment) AS total_segments FROM sections WHERE course_id = ?";
+  let result_total_segments = await realizarConsulta(consulta_total_segments, [course_id]);
+  result_total_segments=result_total_segments[0].total_segments+1
+
+  let consulta_check = "SELECT * FROM user_course WHERE course_id = ? AND user_id = ?";
+  let results_user_course = await realizarConsulta(consulta_check, [course_id, user_id]);
+
+  //Ver si lo has comprado
+  let is_bought=false
+  if ( results_user_course.length !== 0){ is_bought=true}
+
+  //Ver si le pertenece el curso
+  let is_owned=false
+  if ( course.owner_id==user_id ){ is_owned=true}
+
+  
+
+
+  res.render(`courses/section/edit_component`,{course,section,results_sections,result_total_segments,is_bought,is_owned,results_user_course,course_id})
 })
 
 
 //-----------GET AÑADIR SECCION-----------
 router.get('/add_section/:id', isAuthenticated, async (req, res) => {
   let course_id = req.params.id;
-  let user_id = req.session.user.id
+  let user_id = req.session.myuser.id
 
   let consulta_find ="SELECT * FROM courses WHERE id = ?"
   let course = await realizarConsulta(consulta_find, [course_id]);
@@ -278,7 +308,7 @@ router.get('/add_section/:id', isAuthenticated, async (req, res) => {
 //-----------POST COMPRAR CURSO-----------
 router.get('/buy/:id', async (req, res) => {
   let course_id = req.params.id;
-  let user_id = req.session.user.id;
+  let user_id = req.session.myuser.id;
 
   let consulta_update = "UPDATE courses SET total_purchases = total_purchases +1 WHERE id = ?";
   await realizarConsulta(consulta_update, [course_id]);
@@ -326,13 +356,13 @@ router.post('/new', (req, res) => {
   if (select_price_radio === "pay"){ price=req.body.price }
 
   let official=0
-  if (req.session.user.id == 1) { official = 1 }
+  if (req.session.myuser.id == 1) { official = 1 }
 
   let consulta_insert="INSERT INTO courses (title, description, class, category, tags, rating, owner_id, price, official, discount, total_purchases) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
   db.query(
     consulta_insert,
-    [title,description,class_select, category, tags, 0 , req.session.user.id, price, official, 0, 0 ],
+    [title,description,class_select, category, tags, 0 , req.session.myuser.id, price, official, 0, 0 ],
     (error, results) => {
       if (error) {
         console.error("Error al insertar el curso:", error);
@@ -362,9 +392,9 @@ router.post('/edit/:course_id/:component_id', upload.single('file'), isAuthentic
 
   if (file!== undefined){
 
-    let folderName = req.session.user.id
+    let folderName = req.session.myuser.id
     
-    let file_name= `${component_id}-video`
+    let file_name= `${uuidv4()}.mp4`
     await upload_to_server(folderName, req.file, file_name);
 
     let consulta_update_video="UPDATE sections SET video_name = ? WHERE id = ?"
@@ -405,7 +435,7 @@ router.post('/comment_review/:id', async (req, res) => {
     if (review.personal_rating !== 0) {
       total_reviews += 1;
       total_stars += review.personal_rating
-      if (review.user_id==req.session.user.id){
+      if (review.user_id==req.session.myuser.id){
         already=review.personal_rating
       }
     }
@@ -429,7 +459,7 @@ router.post('/comment_review/:id', async (req, res) => {
 
   //Consulta para actualizar la valoración y descripción personal de tu review en el curso
   let consulta_update_personal = "UPDATE user_course SET personal_rating = ?, review = ? WHERE user_id = ? AND course_id = ?";
-  await realizarConsulta(consulta_update_personal, [stars,review_description,req.session.user.id,id]);
+  await realizarConsulta(consulta_update_personal, [stars,review_description,req.session.myuser.id,id]);
 
   res.redirect(`/courses/watch/${id}`);
   
@@ -495,7 +525,25 @@ router.post('/change_order/:id', async (req, res) => {
 
 })
 
+router.post('/change_back_image/:id', upload.single('file'), async (req, res) => {
 
+  let course_id = req.params.id
+  const folderName = "backgrounds";
+  const file_name = `${uuidv4()}.jpg`;
+
+  try {
+      console.log("try")
+      await upload_image_to_server(folderName, req.file, file_name);
+      console.log("after")
+      let consulta_update = "UPDATE courses SET background_image = ? WHERE id = ?";
+      await realizarConsulta(consulta_update, [file_name, course_id]);
+      res.redirect(`/courses/watch/${course_id}`);
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Error subiendo la imagen');
+  }
+
+})
 
 
 module.exports = router

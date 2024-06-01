@@ -1,33 +1,73 @@
 <%- include("../../partials/start.ejs") -%>
+<link rel="stylesheet" href="/stylesheets/watch_section_style.css" class="css">
 </head>
 <body>
 <%- include("../../partials/header.ejs") -%>
+<div id="main_page">
+    <%- include("../../partials/open_apartados_responsive.ejs") -%>
+    <div id="main_content">
+        
+        <div id="specific_course_background">
+            <div class="course_container">
+                <div class="image_container_course">
+                    <img src="http://192.168.1.33/images/backgrounds/<%= course.background_image %>" alt="">
+                </div>
+                <div class="course_data">
+                    <h1 ><%= course.title %></h1>
+                    <p><%= section.segment %>-<%= section.component %> <%= section.title %> </p>
+                </div>
+                
+            </div>
+            <div id="background-fill"></div>
+        </div>
+        <div id="section_info">
 
-<h1><%= course.title %></h1>
-<h3><%= section.segment %>-<%= section.component %> <%= section.title %> </h3>
-<p><%= section.description %></p>
+            <% if (section.video_name!=="" && section.video_name!==null){ %>
+            <div id="section_video">
+                    <video controls>
+                    <source src="http://192.168.1.33/videos/<%= course.owner_id %>/<%= section.video_name %>" type="video/mp4">
+                    Se ha producido un error con el video
+                </video>
+            </div>
+            <% }else{ %>
+            <div id="section_no_video">
+                <span style="color: white">No se ha proporcionado un video aún.</span>
+            </div>
+            <% } %>
+            
+            <div class="section_info_unit">
+                <span>Descripción del apartado:</span>
+                <% if (is_owned){ %>
+                    <a href="/courses/edit/<%= course.id %>/<%= section.id %>" class="border_yellow_button">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Editar Aparatado
+                    </a>
+                <% } %>
+            </div>
+            <div class="section_info_unit" >
+                <% if(section.description==="" || section.description=== null){ %>
+                    <p>Este apartado no tiene descripción.</p>
+                <% }else{ %>
+                    <p><%= section.description %></p>
+                <% } %>
+            </div>
+            <div class="section_info_unit"></div><div class="section_info_unit" ></div>
+        </div>
+        <div id="my_footer">
+            <div class="footer_unit top">
+                <p>Email de contacto: info@empresa.com</p>
+            </div>
+            <div class="footer_unit">
+                <p>Política de Privacidad y Términos de Servicio disponibles bajo solicitud.</p>
+                <p>Todos los derechos de imagenes, videos y multimedia reservados a su autor. </p>
+            </div>
+        </div>
+        
+    </div>
+    <div id="left_banner">
+        <%- include("../../partials/see_sections.ejs") -%>
+    </div>
+</div>
 
-
-<% if (is_owned){ %>
-    <a href="/courses/edit/<%= course.id %>/<%= section.id %>">
-        <i class="fa-solid fa-pen-to-square"></i>
-        Editar componente
-    </a>
-<% } %>
-
-
-<% if (section.video_name!=="" && section.video_name!==null){ %>
-    <br>
-    <video width="500" height="300" controls>
-    <source src="http://192.168.1.34/videos/<%= course.owner_id %>/<%= section.video_name %>" type="video/mp4">
-    Se ha producido un error con el video
-</video>
-<% }else{ %>
-<span>No se ha proporcionado un video aún</span>
-<% } %>
-
-<% if (!is_owned){ %>
-<%- include("../../partials/see_sections.ejs") -%>
-<% } %>
-
-<%- include("../../partials/end.ejs") -%>
+</section>
+</body>

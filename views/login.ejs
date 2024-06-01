@@ -1,16 +1,48 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Pagina</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1>Login</h1>
+
+
+<%- include("partials/start.ejs") -%>
+<link rel="stylesheet" href="/stylesheets/login_register_style.css" class="css">
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<%- include("partials/header.ejs") -%>
+
+<div id="main_page">
+  <div id="main_header">
+    <div id="image_container">
+        <img src="/images/official-background.jpg" alt="">
+    </div>
+    <div id="company_info">
+        <a>TechTeach</a>
+    </div>
+  </div>
+  <div id="main_form">
+    <div class="video-background">
+      <video autoplay loop muted>
+          <source src="/images/tech-background.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="background-tint"></div>
     <form method="POST" name="login">
+      <div class="form_unit title_unit"><h1>Login</h1></div>
+      <div class="form_unit" >
+        <p>Email</p>
         <input type="email" name="email" placeholder="email">
+      </div>
+      <div class="form_unit">
+        <p>Contraseña</p>
         <input type="password" name="password" placeholder="password">
-        <button type="submit">Acceder</button>
+      </div>
+      <div class="form_unit">
+        <p style="text-align: center">¿No tienes una cuenta? Registrate <a href="/register">aquí</a></p>
+        <p style="color: red;text-align: center"><%= message %></p>
+      </div>
+      <div class="form_unit">
+        <button type="submit" class="border_yellow_button">Acceder</button>
+      </div>
+
     </form>
-    <p style="color: red"><%= message %></p>
-  </body>
-</html>
+  </div>
+</div>
+
+<%- include("partials/end.ejs") -%>

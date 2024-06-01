@@ -1,29 +1,81 @@
 <%- include("../../partials/start.ejs") -%>
+<link rel="stylesheet" href="/stylesheets/edit_section_style.css" class="css">
 </head>
 <body>
 <%- include("../../partials/header.ejs") -%>
 
-<h1><%= course.title %></h1>
-<h3><%= section.segment %>-<%= section.component %> <%= section.title %> </h3>
-<p><%= section.description %></p>
+<div id="main_page">
+    <%- include("../../partials/open_apartados_responsive.ejs") -%>
+    <div id="main_content">
+        <div id="specific_course_background">
+            <div class="course_container">
+                <div class="image_container_course">
+                    <img src="http://192.168.1.33/images/backgrounds/<%= course.background_image %>" alt="">
+                </div>
+                <div class="course_data">
+                    <h1 ><%= course.title %></h1>
+                    <p><%= section.segment %>-<%= section.component %> <%= section.title %> </p>
+                </div>
+                
+            </div>
+            <div id="background-fill"></div>
+        </div>
+        <form id="section_info"action="/courses/edit/<%= course.id %>/<%= section.id %>" method="post" enctype="multipart/form-data">
+            <div id="section_content">
+                <div class="unit">
+                    <p>Titulo del apartado</p>
+                    <input type="text" name="title" value="<%= section.title %>" placeholder="Titulo">
+                </div>
+                <div class="unit">
+                    <p>Descripción del apartado</p>
+                    <textarea name="description" placeholder="Descripción" maxlength="500"><%= section.description %></textarea>
+                </div>
+                <div class="unit" >
+                    <% if (section.video_name!=="" && section.video_name!==null){ %>
+                        <span>Ya has subido un video. Selecciona archivo para reemplazarlo</span>  
+                    <% }else{ %>
+                        <span>No se ha proporcionado un video, selecciona archivo para subirlo.</span>
+                    <% } %>
+                </div>
+                <div class="unit" style="margin-bottom: 0;margin-top:0">
+                    <input type="file" name="file" class="file">
+                </div>
+                <div class="unit alone_button">
+                    <button type="submit" class="border_yellow_button">Subir Video</button>
+                </div>
+            </div>
+        </form>
+        <div id="my_footer">
+            <div class="footer_unit top">
+                <p>Email de contacto: info@empresa.com</p>
+            </div>
+            <div class="footer_unit">
+                <p>Política de Privacidad y Términos de Servicio disponibles bajo solicitud.</p>
+                <p>Todos los derechos de imagenes, videos y multimedia reservados a su autor. </p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="left_banner">
+        <%- include("../../partials/see_sections.ejs") -%>
+    </div>
+</div>
+    
+
 
 <form action="/courses/edit/<%= course.id %>/<%= section.id %>" method="post" enctype="multipart/form-data">
 
-    <input type="text" name="title" value="<%= section.title %>" placeholder="Titulo">
-    <textarea name="description" placeholder="Descripción"><%= section.description %></textarea>
+    
+    
 
     <div>
-    <% if (section.video_name!=="" && section.video_name!==null){ %>
-        <span>Ya has subido un video. Selecciona archivo para reemplazarlo</span>  
-    <% }else{ %>
-        <span>No se ha proporcionado un video, selecciona archivo para subirlo.</span>
-    <% } %>
+   
     </div>
 
     <div>
-        <input type="file" name="file">
+       
     </div>
-    <button type="submit">Subir Video</button>
+    
 </form>
 
 

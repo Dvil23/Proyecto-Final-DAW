@@ -1,0 +1,157 @@
+<%- include("../partials/start.ejs") -%>
+<link rel="stylesheet" href="/stylesheets/profile_style.css">
+</head>
+<body>
+
+<%- include("../partials/header.ejs") -%>
+
+<section id="main_page">
+   <div id="header_full">
+
+      <div class="background-tint"></div>
+      <div class="video-background">
+         <video autoplay loop muted>
+            <source src="/images/tech-background.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div id="banner">
+        
+         <div id="biography_username">
+            <h1><%= user.username %></h1>
+            <p><%= user.biography %></p>
+         </div>
+         <div id="image_container">
+            <img src="http://192.168.1.33/images/pfp/<%= user.pfp %>" alt="">
+         </div>
+      </div>
+   </div>
+   <div id="view_course">
+      <div id="title">
+         <h1>Curso creados</h1>
+      </div>
+      <% if(courses_owned.length>0){ %>
+      <div id="all_courses_container">
+         <% courses_owned.forEach(course=>{ %>
+
+             <% if (Math.trunc(course.discount) !== 0) { %>
+                 <% course_off = course.price - ((course.price * course.discount) / 100) %>
+
+             <div class="course_unit" data-class="<%= course.class %>" data-category="<%= course.category %>" data-price="<%= course_off %>" >
+             
+             <% } else{  %>
+
+                 <div class="course_unit" data-class="<%= course.class %>" data-category="<%= course.category %>" data-price="<%= course.price %>" >
+             
+             <% } %>
+         
+             
+                 <div class="course_image">
+                     <img src="http://192.168.1.33/images/backgrounds/<%= course.background_image %>" alt="">
+                 </div>
+     
+                 <h1><%= course.title %></p>
+                 <h3><%= course.category %></h3>
+                 <h5><%= course.class %></h3>
+                 
+                 
+                 
+     
+                 <div class="price_container">
+                     <% if (Math.trunc(course.discount) !== 0) { //Si hay descuento, lo enseña%>
+                     <h4><s><%= course.price %>€</s></h4> 
+                     <h2><%= course.price - ((course.price * course.discount) / 100) %>€</h2>
+                     <h2 class="off"><%= course.discount %>% OFF</h2>
+     
+                     <% } else{ //Si no hay descuento, pone el precio talcual %> 
+                         <% if(course.price == 0.00) { %>
+                             <h2>Gratis</h2> 
+                         <% }else{ %>
+                             <h2><%= course.price %>€ </h2> 
+                         <% } %>
+                     <% } %>
+                 </div>
+                 <div class="empty"></div>
+                 <div class="watch_button_username">
+                     <div class="username_container">
+                         
+                         <% if (course.owner_id===1){ %>
+                             <p>Oficial</span>
+                         <% } %>
+                     </div>
+                     <a href="/courses/watch/<%= course.id %>">Ver</a>
+                 </div>
+             </div>
+         
+         <% }) %>
+     </div>
+     <% }else{ %>
+      <div class="no_course"><p>Este usuario no ha creado ningún curso</p></div>
+      <% } %>
+   </div>
+   <div id="view_course">
+      <div id="title">
+         <h1>Curso adquiridos</h1>
+      </div>
+      <% if(courses_bought.length>0){ %>
+      <div id="all_courses_container">
+         <% courses_bought.forEach(course=>{ %>
+
+             <% if (Math.trunc(course.discount) !== 0) { %>
+                 <% course_off = course.price - ((course.price * course.discount) / 100) %>
+
+             <div class="course_unit" data-class="<%= course.class %>" data-category="<%= course.category %>" data-price="<%= course_off %>" >
+             
+             <% } else{  %>
+
+                 <div class="course_unit" data-class="<%= course.class %>" data-category="<%= course.category %>" data-price="<%= course.price %>" >
+             
+             <% } %>
+         
+             
+                 <div class="course_image">
+                     <img src="http://192.168.1.33/images/backgrounds/<%= course.background_image %>" alt="">
+                 </div>
+     
+                 <h1><%= course.title %></p>
+                 <h3><%= course.category %></h3>
+                 <h5><%= course.class %></h3>
+                 
+                 
+                 
+     
+                 <div class="price_container">
+                     <% if (Math.trunc(course.discount) !== 0) { //Si hay descuento, lo enseña%>
+                     <h4><s><%= course.price %>€</s></h4> 
+                     <h2><%= course.price - ((course.price * course.discount) / 100) %>€</h2>
+                     <h2 class="off"><%= course.discount %>% OFF</h2>
+     
+                     <% } else{ //Si no hay descuento, pone el precio talcual %> 
+                         <% if(course.price == 0.00) { %>
+                             <h2>Gratis</h2> 
+                         <% }else{ %>
+                             <h2><%= course.price %>€ </h2> 
+                         <% } %>
+                     <% } %>
+                 </div>
+                 <div class="empty"></div>
+                 <div class="watch_button_username">
+                     <div class="username_container">
+                         
+                         <% if (course.owner_id===1){ %>
+                             <p>Oficial</span>
+                         <% } %>
+                     </div>
+                     <a href="/courses/watch/<%= course.id %>">Ver</a>
+                 </div>
+             </div>
+         
+         <% }) %>
+      </div>
+      <% }else{ %>
+      <div class="no_course"><p>Este usuario no ha adquirido ningún curso</p></div>
+      <% } %>
+   </div>
+</section>
+
+<%- include("../partials/end.ejs") -%>
