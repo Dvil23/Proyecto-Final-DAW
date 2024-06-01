@@ -90,7 +90,7 @@ router.post('/register', (req, res, next ) => {
         bcrypt.hash(password, salt, function(err, hash) {
 
           let consulta_insert="INSERT INTO users (username, email, password, type, phone, pfp) VALUES (?, ?, ?, ?, ?, ?)"
-          db.query(consulta_insert, [username, email, hash, 0, phone, "default_pfp"])
+          db.query(consulta_insert, [username, email, hash, 0, phone, "default_pfp.jpg"])
 
         })
       })

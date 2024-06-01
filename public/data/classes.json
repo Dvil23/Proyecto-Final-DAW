@@ -1,9 +1,9 @@
 {
-    "Informatica": ["Excel", "Powerpoint", "Word", "Mecanografía", "Photoshop", "Audacity", "Adobe Premiere Pro"],
-    "Programacion": ["Python", "Java", "C++", "Javascript", "PHP", "C#", "Swift", "Go", "Ruby", "SQL"],
-    "Desarrollo web": ["Vue", "Angular", "Obsidian", "NodeJS", "React", "HTML", "CSS", "SASS", "Javascript"],
-    "Analisis de datos": ["SQL", "MYSQL"],
-    "Desarrollo de videojuegos": ["Unreal Engine", "Unity", "Level design", "Character design"],
-    "Graphic design": ["Photoshop", "Gimp", "Character design"],
-    "3D Design": ["Blockbench", "Blender", "Rigging", "Voxels"]
+    "Informatica": ["Excel", "Powerpoint", "Word", "Mecanografía", "Photoshop", "Audacity", "Adobe Premiere Pro","Microsoft Access","Google Sheets","Adobe Illustrator","Adobe InDesign","Canva"],
+    "Programacion": ["Python", "Java", "C++", "C#", "Swift", "Go", "Ruby", "SQL","Rust","Kotlin"],
+    "Desarrollo web": ["Vue", "Angular", "jQuery","NodeJS", "React", "HTML", "PHP", "CSS", "SASS", "Javascript","Flask","WordPress"],
+    "Analisis de datos": ["SQL", "MYSQL","PostgreSQL","MongoDB","Tableau"],
+    "Desarrollo de videojuegos": ["Unreal Engine", "Unity", "Level design", "Godot Engine","Character design","GameMaker Studio","CryEngine"],
+    "Graphic design": ["Photoshop", "Gimp", "Character design","Adobe Photoshop Lightroom","Inkscape","Typography"],
+    "3D Design": ["Blockbench", "Blender", "Rigging", "Voxels","Autodesk Maya","Cinema 4D"]
 }
