@@ -169,7 +169,7 @@
                 
                 //Por cada valor del array, creamos una opción
                 datos[category_val].forEach(item => {
-                    console.log("adios")
+
                     let option = document.createElement("option")
                     option.value = item
                     option.text = item
@@ -184,7 +184,6 @@
                 // Aplicamos de nuevo los filtros por que hemos borrado todo el select de las clases
                 filterCourses()  
             }else{
-                console.log("else")
                 filterCourses()
             }
             

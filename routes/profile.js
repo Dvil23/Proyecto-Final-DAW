@@ -219,9 +219,9 @@ router.post('/change_image', upload.single('file'), isAuthenticated, async (req,
 
     console.log("CHANGE IMAGE")
     try {
-        console.log("try")
+        console.log("Intentando subir imagen")
         await upload_image_to_server(folderName, req.file, file_name);
-        console.log("after")
+        console.log("Imagen subida")
         let consulta_update = "UPDATE users SET pfp = ? WHERE id = ?";
         await realizarConsulta(consulta_update, [file_name, user_id]);
         res.locals.myuser.mypfp=file_name

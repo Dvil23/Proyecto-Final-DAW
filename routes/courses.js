@@ -252,7 +252,6 @@ router.get('/edit/:course_id/:component_id',  async (req, res) => {
   let component_id = req.params.component_id;
   let user_id = req.session.myuser.id
 
-  console.log("aqui")
   let consulta_find = "SELECT * FROM courses WHERE id = ?";
   let course=await realizarConsulta(consulta_find, [course_id])
   course= course[0]
@@ -338,8 +337,6 @@ router.post('/edit/:id', async (req, res) => {
   let consulta_update="UPDATE courses SET title = ?, description = ?, class = ?, category = ?, tags = ?, price = ?, discount = ? WHERE id = ?"
   await realizarConsulta(consulta_update, [title,description,class_select,category,tags,price,discount,course_id]);
 
-
-  console.log(title,description,category, class_select,select_price_radio,tags)
   res.redirect(`/courses/watch/${course_id}`)
 });
 
@@ -386,9 +383,6 @@ router.post('/edit/:course_id/:component_id', upload.single('file'), isAuthentic
   let seccion = await realizarConsulta(consulta_select, [component_id]);
   seccion=seccion[0]
 
-  console.log("FILE: ", file)
-  
-  
 
   if (file!== undefined){
 
@@ -482,7 +476,6 @@ router.post('/change_order/:id', async (req, res) => {
         console.log("NEW", component)
         let formatted_string = component.slice(4)
         let new_component = "INSERT INTO sections (course_id,title,segment,component) VALUES (?,?,?,?)";
-        console.log(`INSERT INTO sections (course_id,title,segment,component) VALUES (${course_id},${formatted_string},${key},${component})`)
         await realizarConsulta(new_component, [course_id,formatted_string,key,count_component]); 
       } 
       //BORRAR COMPONENTE SI LO HEMOS BORRADO
@@ -532,9 +525,9 @@ router.post('/change_back_image/:id', upload.single('file'), async (req, res) =>
   const file_name = `${uuidv4()}.jpg`;
 
   try {
-      console.log("try")
+      console.log("Subiendo imagen...")
       await upload_image_to_server(folderName, req.file, file_name);
-      console.log("after")
+      console.log("Imagen subida")
       let consulta_update = "UPDATE courses SET background_image = ? WHERE id = ?";
       await realizarConsulta(consulta_update, [file_name, course_id]);
       res.redirect(`/courses/watch/${course_id}`);

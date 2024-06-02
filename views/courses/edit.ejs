@@ -150,7 +150,6 @@
     })
     function discount_appear(valor){
         let container = document.getElementById('discount_container')
-        console.log(container)
         if (valor===true){
             container.style.display='flex'
         }else{
@@ -208,7 +207,6 @@
         // Quitamos del array el valor del div que hemos eliminado y lo igualamos al input hidden
         tags_array = tags_array.filter(item => item !== valor)
         hidden_input.value = JSON.stringify(tags_array)
-        console.log(tags_array)
     }
 
 // -------------Funciones para el select---------
@@ -234,7 +232,7 @@
             option.value = datos[category_val][i]
             option.text = datos[category_val][i]
 
-            if (start===true){
+            if (start===true && datos[category_val][i] === "<%= course.class %>" ){
                 option.setAttribute("selected","selected")
             }
 

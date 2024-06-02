@@ -306,7 +306,6 @@
 
         document.getElementById('section_order').value = JSON.stringify(section)
 
-        console.log(section)
     }
     
     //Funcion que realizarán cuando cambies de lugar un componente en una seccion
@@ -321,7 +320,6 @@
             let [item] = arr.splice(evt.oldIndex, 1);
             arr.splice(evt.newIndex, 0, item);
             document.getElementById('section_order').value = JSON.stringify(section)
-            console.log(section)
         }
         
     }
@@ -382,7 +380,6 @@
 
     //Confirmar el borrar de un componente, y si lo borra, ponerle del- en el array para indicar que debe ser borrado
     function del_component(value){
-        console.log(section)
         Swal.fire({
             confirmButtonText: `Borrar`,
             html: `
@@ -546,7 +543,6 @@
     });
 
     function change_star(number,unique_class) {
-        console.log("hola")
         document.querySelectorAll(unique_class).forEach(star =>{
             if (star.getAttribute('data-value') <= number){
                 star.classList.add('fa-solid');

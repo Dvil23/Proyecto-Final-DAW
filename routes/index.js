@@ -116,13 +116,13 @@ router.post('/login', (req, res, next) => {
   db.query(consulta_check, [email], (error, results) => {
 
     if (results.length > 0) { //Existe el email
-      console.log("EXISTE")
+      console.log("El email ya existe")
       //Hashear la contraseña y compararla con el resultado de la base de datos
       bcrypt.compare(password, results[0].password, (err, correct) => {
 
         //Si todos los datos son correctos, inicia sesión y te redirecciona
         if (correct) {
-          console.log("CORRECT")
+          console.log("Se ha iniciado sesión")
           req.session.myuser= {
             id: results[0].id,
             mypfp: results[0].pfp,
@@ -131,12 +131,12 @@ router.post('/login', (req, res, next) => {
           res.redirect('/')
 
         } else { //Existe el email, pero no coincide con la contraseña
-          console.log("INCORRECTO")
+          console.log("No coinciden los datos")
           res.render('login', { message: "El email y contraseña son incorrectos, o no existen" })
         }
       })
     } else { //No existe el email
-      console.log("NO EXISTE")
+      console.log("No existe el email")
       res.render('login', { message: "El email y contraseña son incorrectos, o no existen" })
     }
   })
